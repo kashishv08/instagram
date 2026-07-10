@@ -1,0 +1,298 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Instagram</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Dancing+Script:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@5"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background: #000;
+        color: #fff;
+        font-family: "Inter", sans-serif;
+        min-height: 100vh;
+      }
+      ::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+      }
+
+      /* ── SIDEBAR ── */
+      #sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 72px;
+        background: #000;
+        border-right: 1px solid #262626;
+        z-index: 100;
+        display: flex;
+        flex-direction: column;
+        padding: 8px 0 16px;
+        transition: width 0.2s;
+      }
+      @media (min-width: 1264px) {
+        #sidebar {
+          width: 245px;
+        }
+      }
+
+      .ig-logo-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 72px;
+        padding: 0 12px;
+      }
+      .ig-logo-text {
+        font-family: "Dancing Script", cursive;
+        font-size: 26px;
+        font-weight: 700;
+        color: #fff;
+        display: none;
+      }
+      @media (min-width: 1264px) {
+        .ig-logo-text {
+          display: block;
+        }
+        .ig-logo-svg {
+          display: none;
+        }
+      }
+
+      .nav-item {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 12px 12px;
+        margin: 2px 8px;
+        border-radius: 8px;
+        cursor: pointer;
+        color: #fff;
+        text-decoration: none;
+        transition: background 0.15s;
+        white-space: nowrap;
+      }
+      .nav-item:hover {
+        background: #1a1a1a;
+      }
+      .nav-item .nav-label {
+        font-size: 15px;
+        display: none;
+        font-weight: 400;
+      }
+      .nav-item.active .nav-label {
+        font-weight: 600;
+      }
+      @media (min-width: 1264px) {
+        .nav-item .nav-label {
+          display: block;
+        }
+      }
+      .nav-item .material-symbols-outlined {
+        font-size: 26px;
+        flex-shrink: 0;
+      }
+      .nav-spacer {
+        flex: 1;
+      }
+
+      /* ── MAIN WRAPPER ── */
+      #main-wrapper {
+        margin-left: 72px;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+      }
+      @media (min-width: 1264px) {
+        #main-wrapper {
+          margin-left: 245px;
+        }
+      }
+
+      #content-area {
+        display: flex;
+        gap: 56px;
+        width: 100%;
+        max-width: 850px;
+        padding: 0 16px;
+        align-items: flex-start;
+      }
+
+      #center-feed {
+        flex: 1;
+        max-width: 470px;
+        min-width: 0;
+        padding-top: 8px;
+      }
+
+      #right-panel {
+        width: 320px;
+        flex-shrink: 0;
+        padding-top: 24px;
+        position: sticky;
+        top: 0;
+        max-height: 100vh;
+        overflow-y: auto;
+        display: none;
+      }
+      @media (min-width: 1024px) {
+        #right-panel {
+          display: block;
+        }
+      }
+
+      /* ── MESSAGES FLOAT ── */
+      #messages-float {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        background: #262626;
+        color: #fff;
+        border-radius: 24px;
+        padding: 12px 20px;
+        display: none;
+        align-items: center;
+        gap: 10px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        border: none;
+        transition: background 0.15s;
+      }
+      #messages-float:hover {
+        background: #3a3a3a;
+      }
+      @media (min-width: 1024px) {
+        #messages-float {
+          display: flex;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    {% if messages %}
+    <div class="toast toast-end z-100">
+      {% for msg in messages %}
+      <div class="alert alert-{{msg.tags}}">
+        <span>{{msg}}</span>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+    <!-- ── LEFT SIDEBAR ── -->
+    <aside id="sidebar">
+      <!-- Logo -->
+      <a href="/" class="ig-logo-icon nav-item" style="margin-bottom: 8px">
+        <svg
+          class="ig-logo-svg"
+          xmlns="http://www.w3.org/2000/svg"
+          width="28"
+          height="28"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#fff"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect x="2" y="2" width="20" height="20" rx="5" />
+          <circle cx="12" cy="12" r="4" />
+          <circle cx="17.5" cy="6.5" r="1.1" fill="#fff" stroke="none" />
+        </svg>
+        <span class="ig-logo-text">Instagram</span>
+      </a>
+
+      <!-- Nav links -->
+      <nav style="display: flex; flex-direction: column; flex: 1">
+        <a href="/" class="nav-item active" id="nav-home">
+          <span
+            class="material-symbols-outlined"
+            style="font-variation-settings: &quot;FILL&quot; 1"
+            >home</span
+          >
+          <span class="nav-label">Home</span>
+        </a>
+        <a href="#" class="nav-item" id="nav-reels">
+          <span class="material-symbols-outlined">smart_display</span>
+          <span class="nav-label">Reels</span>
+        </a>
+        <a href="#" class="nav-item" id="nav-messages">
+          <span class="material-symbols-outlined">send</span>
+          <span class="nav-label">Messages</span>
+        </a>
+        <a href="#" class="nav-item" id="nav-search">
+          <span class="material-symbols-outlined">search</span>
+          <span class="nav-label">Search</span>
+        </a>
+        <a href="#" class="nav-item" id="nav-notifications">
+          <span class="material-symbols-outlined">favorite</span>
+          <span class="nav-label">Notifications</span>
+        </a>
+        <a href="#" class="nav-item" id="nav-create">
+          <span class="material-symbols-outlined">add_box</span>
+          <span class="nav-label">Create</span>
+        </a>
+        <a href="{% url 'create-profile' %}" class="nav-item" id="nav-profile">
+          <span class="material-symbols-outlined">account_circle</span>
+          <span class="nav-label">Profile</span>
+        </a>
+        <div class="nav-spacer"></div>
+        <a href="#" class="nav-item" id="nav-more">
+          <span class="material-symbols-outlined">menu</span>
+          <span class="nav-label">More</span>
+        </a>
+        <a href="#" class="nav-item" id="nav-meta">
+          <span class="material-symbols-outlined">apps</span>
+          <span class="nav-label">Also from Meta</span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- ── MAIN CONTENT ── -->
+    <div id="main-wrapper">
+      <div id="content-area">
+        <main id="center-feed">{% block content %}{% endblock %}</main>
+        <aside id="right-panel">{% block right_panel %}{% endblock %}</aside>
+      </div>
+    </div>
+
+    <!-- Messages floating button -->
+    <button id="messages-float">
+      <span class="material-symbols-outlined" style="font-size: 20px"
+        >send</span
+      >
+      Messages
+    </button>
+  </body>
+</html>

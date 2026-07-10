@@ -1,0 +1,247 @@
+<style>
+  .rp-user-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .rp-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+  .rp-username {
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+  }
+  .rp-display {
+    font-size: 13px;
+    color: #a8a8a8;
+  }
+  .rp-switch-btn {
+    margin-left: auto;
+    font-size: 14px;
+    font-weight: 600;
+    color: #0095f6;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .rp-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  .rp-section-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #a8a8a8;
+  }
+  .rp-see-all {
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  .suggestion-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 0;
+  }
+  .sg-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+  .sg-info {
+    flex: 1;
+    min-width: 0;
+  }
+  .sg-name-row {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+  .sg-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .sg-verified {
+    color: #0095f6;
+    font-size: 13px;
+    font-variation-settings: "FILL" 1;
+  }
+  .sg-sub {
+    font-size: 12px;
+    color: #a8a8a8;
+  }
+  .sg-follow-btn {
+    font-size: 13px;
+    font-weight: 600;
+    color: #0095f6;
+    background: none;
+    border: none;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .rp-footer {
+    margin-top: 20px;
+  }
+  .rp-footer-links {
+    font-size: 11px;
+    color: #a8a8a8;
+    line-height: 1.8;
+  }
+  .rp-footer-links a {
+    color: #a8a8a8;
+    text-decoration: none;
+    margin-right: 4px;
+  }
+  .rp-footer-links a:hover {
+    text-decoration: underline;
+  }
+  .rp-copyright {
+    font-size: 11px;
+    color: #5a5a5a;
+    margin-top: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+</style>
+
+<!-- Current user -->
+<div class="rp-user-row">
+  {% if request.user.is_authenticated %}
+  <img
+    class="rp-avatar"
+    src="{{request.user.profile.avatar.url}}"
+    alt="tul_sihere"
+  />
+  <div>
+    <div class="rp-username">{{request.user.username}}</div>
+    <!-- <div class="rp-display">tulsi</div> -->
+  </div>
+  <a class="rp-switch-btn" href="{% url 'logout-user' %}">Logout</a>
+  {% endif %} {% if not request.user.is_authenticated %}
+  <div class="gap-2">
+    <a class="rp-switch-btn" href="{% url 'login-user' %}">Login</a>
+    <a class="rp-switch-btn" href="{% url 'register-user' %}">Signup</a>
+  </div>
+  {% endif %}
+</div>
+
+<!-- Suggested for you -->
+<div class="rp-section-header">
+  <span class="rp-section-title">Suggested for you</span>
+  <span class="rp-see-all">See all</span>
+</div>
+
+<div class="suggestion-item">
+  <img
+    class="sg-avatar"
+    src="https://picsum.photos/seed/rohit/72/72"
+    alt="Rohit Khatri"
+  />
+  <div class="sg-info">
+    <div class="sg-name-row">
+      <span class="sg-name">Rohit Khatri</span>
+      <span class="material-symbols-outlined sg-verified">verified</span>
+    </div>
+    <div class="sg-sub">Popular</div>
+  </div>
+  <button class="sg-follow-btn">Follow</button>
+</div>
+
+<div class="suggestion-item">
+  <img
+    class="sg-avatar"
+    src="https://picsum.photos/seed/ispeed/72/72"
+    alt="IShowSpeed"
+  />
+  <div class="sg-info">
+    <div class="sg-name-row">
+      <span class="sg-name">IShowSpeed</span>
+      <span class="material-symbols-outlined sg-verified">verified</span>
+    </div>
+    <div class="sg-sub">Popular</div>
+  </div>
+  <button class="sg-follow-btn">Follow</button>
+</div>
+
+<div class="suggestion-item">
+  <img
+    class="sg-avatar"
+    src="https://picsum.photos/seed/vicky/72/72"
+    alt="Vicky Kaushal"
+  />
+  <div class="sg-info">
+    <div class="sg-name-row">
+      <span class="sg-name">Vicky Kaushal</span>
+      <span class="material-symbols-outlined sg-verified">verified</span>
+    </div>
+    <div class="sg-sub">Followed by darshanaravaldz</div>
+  </div>
+  <button class="sg-follow-btn">Follow</button>
+</div>
+
+<div class="suggestion-item">
+  <img
+    class="sg-avatar"
+    src="https://picsum.photos/seed/ulhas/72/72"
+    alt="Ulhas Maruti Kamathe"
+  />
+  <div class="sg-info">
+    <div class="sg-name-row">
+      <span class="sg-name">Ulhas Maruti Kamathe</span>
+      <span class="material-symbols-outlined sg-verified">verified</span>
+    </div>
+    <div class="sg-sub">Popular</div>
+  </div>
+  <button class="sg-follow-btn">Follow</button>
+</div>
+
+<div class="suggestion-item">
+  <img
+    class="sg-avatar"
+    src="https://picsum.photos/seed/jasprit/72/72"
+    alt="Jasprit Bumrah"
+  />
+  <div class="sg-info">
+    <div class="sg-name-row">
+      <span class="sg-name">Jasprit Bumrah</span>
+      <span class="material-symbols-outlined sg-verified">verified</span>
+    </div>
+    <div class="sg-sub">Popular</div>
+  </div>
+  <button class="sg-follow-btn">Follow</button>
+</div>
+
+<!-- Footer -->
+<div class="rp-footer">
+  <div class="rp-footer-links">
+    <a href="#">About</a>·<a href="#"> Help</a>·<a href="#"> Press</a>·<a
+      href="#"
+    >
+      API</a
+    >·<a href="#"> Jobs</a>·<a href="#"> Privacy</a>·<a href="#"> Terms</a>·<a
+      href="#"
+    >
+      Locations</a
+    >·<a href="#"> Language</a>·<a href="#"> Meta Verified</a>
+  </div>
+  <div class="rp-copyright">© 2026 Instagram from Meta</div>
+</div>
