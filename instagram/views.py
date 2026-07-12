@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from .forms import LoginForm, ProfileForm
+from .forms import LoginForm, ProfileModelForm, PostModelForm
 from .models import Post, Profile
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
@@ -63,7 +63,7 @@ def home(request):
 @login_required
 def createProfile(request):
     if request.method == 'POST':
-        form = ProfileForm(request.POST, request.FILES)
+        form = ProfileModelForm(request.POST or None, request.FILES or None)
         if(form.is_valid()): 
             username = request.user.username
             user = User.objects.filter(username=username).first()
@@ -72,13 +72,41 @@ def createProfile(request):
                 messages.info(request, "Profile Already exists")
                 return redirect("/login")
             else:
-                Profile.objects.create(
-                user = user,
-                avatar = form.cleaned_data.get('avatar'),
-                bio = form.cleaned_data.get('bio'),
-                date_birth = form.cleaned_data.get('date_birth')
-                )
+                profile = form.save(commit=False)
+                profile.user = request.user
+                form.save()
                 messages.success(request, "Profile created :)")
                 return redirect('/')
-    form = ProfileForm()
+    form = ProfileModelForm()
     return render(request, 'profileForm.html', {'form' : form})
+
+def createPost(request):
+    form = PostModelForm(request.POST or None, request.FILES or None)
+    if request.method == 'POST' and form.is_valid():
+        post = form.save(commit=False)
+        post.user = request.user
+        form.save()
+        messages.success(request, "Post created")
+        return redirect("/")
+    return render(request,'PostForm.html', {"form": form})
+
+def editPost(request, id):
+    post = Post.objects.get(id=id)
+    form = PostModelForm(request.POST or None, request.FILES or None, instance=post)
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        messages.success(request, "Form edited")
+        return redirect("/")
+    return render(request, 'PostForm.html', {"form": form, 'post': post})
+
+
+def likePost(request, id):
+    post = Post.objects.get(id=id)
+    user = request.user
+    if request.method == 'POST':
+        exist = post.likes.filter(id=request.user.id).exists()
+        if exist:
+            post.likes.remove(request.user)
+        else:
+            post.likes.add(request.user)
+    return redirect("/")

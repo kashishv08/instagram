@@ -193,7 +193,23 @@
       </div>
       <div class="post-location">Amsterdam, Netherlands</div>
     </div>
-    <button class="post-more-btn">···</button>
+
+    <details class="dropdown dropdown-end">
+      <summary class="post-more-btn" style="list-style: none; cursor: pointer">
+        ···
+      </summary>
+      <ul
+        class="menu dropdown-content rounded-box z-1 w-44 p-2 shadow-sm"
+        style="background-color: #262626; color: #fff"
+      >
+        <li>
+          <a href="{% url 'edit-post' post.id %}" style="color: #fff"
+            >Edit Post</a
+          >
+        </li>
+        <li><a style="color: #ef4444">Delete Post</a></li>
+      </ul>
+    </details>
   </header>
 
   <div class="post-img-wrap">
@@ -215,9 +231,18 @@
   </div>
 
   <div class="post-actions">
-    <button class="action-btn" title="Like">
-      <span class="material-symbols-outlined">favorite_border</span>
-    </button>
+    <form action="{% url 'like-post' post.id %}" method="post">
+      {%csrf_token%}
+      <button class="action-btn" title="Like" type="submit">
+        {% if request.user in post.likes.all %}
+        <span class="material-symbols-outlined" style="color: red"
+          >favorite</span
+        >
+        {% else %}
+        <span class="material-symbols-outlined">favorite_border</span>
+        {% endif %}
+      </button>
+    </form>
     <button class="action-btn" title="Comment">
       <span class="material-symbols-outlined">chat_bubble_outline</span>
     </button>
@@ -228,7 +253,7 @@
       <span class="material-symbols-outlined">bookmark_border</span>
     </button>
   </div>
-  <div class="post-likes">178,832 likes</div>
+  <div class="post-likes">{{post.like_counts}} likes</div>
   <div class="post-caption">
     <span class="cap-user">{{post.user.username}}</span
     ><span class="material-symbols-outlined verified-icon">verified </span

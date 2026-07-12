@@ -133,7 +133,10 @@
   />
   <div>
     <div class="rp-username">{{request.user.username}}</div>
-    <!-- <div class="rp-display">tulsi</div> -->
+    <div class="rp-display">
+      Followers: {{request.user.profile.followers.count}} following:
+      {{request.user.profile.following.count}}
+    </div>
   </div>
   <a class="rp-switch-btn" href="{% url 'logout-user' %}">Logout</a>
   {% endif %} {% if not request.user.is_authenticated %}
