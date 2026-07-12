@@ -10,6 +10,7 @@ class Profile(models.Model):
     bio = models.TextField()
     date_birth = models.DateField()
     followers = models.ManyToManyField(to='self',symmetrical=False, blank=True, related_name='following')
+    is_onboard = models.BooleanField(default=False)
     def __str__(self):
         return f"{self.user}"
 

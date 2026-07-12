@@ -58,9 +58,14 @@
     border: none;
     color: #0095f6;
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
     padding: 0 4px;
+    letter-spacing: 0.1px;
+    transition: color 0.15s;
+  }
+  .post-follow-btn:hover {
+    color: #4db5ff;
   }
   .verified-icon {
     color: #0095f6;
@@ -194,22 +199,111 @@
       <div class="post-location">Amsterdam, Netherlands</div>
     </div>
 
-    <details class="dropdown dropdown-end">
-      <summary class="post-more-btn" style="list-style: none; cursor: pointer">
-        ···
-      </summary>
-      <ul
-        class="menu dropdown-content rounded-box z-1 w-44 p-2 shadow-sm"
-        style="background-color: #262626; color: #fff"
+    <!-- Follow btn + ··· dropdown -->
+    <div
+      style="
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-left: auto;
+        position: relative;
+      "
+    >
+      <!-- Follow button -->
+      <!-- prettier-ignore -->
+      {% if post.user.profile not in request.user.profile.following.all and post.user.profile != request.user.profile %}
+      <a
+        href="{% url 'follow' post.id %}"
+        class="post-follow-btn"
+        id="follow-btn-{{ post.id }}"
+        >Follow</a
       >
-        <li>
-          <a href="{% url 'edit-post' post.id %}" style="color: #fff"
-            >Edit Post</a
-          >
-        </li>
-        <li><a style="color: #ef4444">Delete Post</a></li>
-      </ul>
-    </details>
+      {% endif %}
+
+      <!-- ··· More options dropdown -->
+      <details class="dropdown dropdown-end">
+        <summary
+          class="post-more-btn"
+          style="list-style: none; cursor: pointer"
+        >
+          ···
+        </summary>
+        <ul
+          style="
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background: #262626;
+            border-radius: 12px;
+            border: 1px solid #3a3a3a;
+            overflow: hidden;
+            min-width: 180px;
+            z-index: 50;
+            padding: 4px 0;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+            list-style: none;
+            margin: 0;
+          "
+        >
+          <!-- Unfollow -->
+          <!-- prettier-ignore -->
+          {% if post.user.profile in request.user.profile.following.all and post.user.profile != request.user.profile %}
+          <li>
+            <a
+              href="{% url 'follow' post.id %}"
+              style="
+                display: block;
+                padding: 12px 16px;
+                font-size: 14px;
+                font-weight: 400;
+                color: #fff;
+                text-decoration: none;
+                transition: background 0.15s;
+              "
+              onmouseover="this.style.background = '#3a3a3a'"
+              onmouseout="this.style.background = 'transparent'"
+              >Unfollow</a
+            >
+          </li>
+          {% endif %} {% if post.user.profile == request.user.profile %}
+          <li style="border-top: 1px solid #3a3a3a">
+            <a
+              href="{% url 'edit-post' post.id %}"
+              style="
+                display: block;
+                padding: 12px 16px;
+                font-size: 14px;
+                font-weight: 400;
+                color: #fff;
+                text-decoration: none;
+                transition: background 0.15s;
+              "
+              onmouseover="this.style.background = '#3a3a3a'"
+              onmouseout="this.style.background = 'transparent'"
+              >Edit post</a
+            >
+          </li>
+          <li style="border-top: 1px solid #3a3a3a">
+            <a
+              href="#"
+              style="
+                display: block;
+                padding: 12px 16px;
+                font-size: 14px;
+                font-weight: 600;
+                color: #ed4956;
+                text-decoration: none;
+                transition: background 0.15s;
+              "
+              onmouseover="this.style.background = '#3a3a3a'"
+              onmouseout="this.style.background = 'transparent'"
+              >Delete post</a
+            >
+          </li>
+          {% endif %}
+        </ul>
+      </details>
+    </div>
   </header>
 
   <div class="post-img-wrap">

@@ -1,0 +1,455 @@
+/* ── OVERRIDE BASE LAYOUT: full remaining width, content centered ── */
+#main-wrapper {
+  justify-content: flex-start !important;
+}
+#content-area {
+  max-width: 100% !important;
+  padding: 0 !important;
+  gap: 0 !important;
+  width: 100% !important;
+}
+#center-feed {
+  max-width: 100% !important;
+  width: 100% !important;
+  padding-top: 0 !important;
+}
+
+/* ── ROOT PAGE ── */
+.profile-page {
+  font-family: "Inter", sans-serif;
+  width: 100%;
+  max-width: 935px;
+  margin: 0 auto;
+  padding: 40px 32px 80px 40px;  /* extra left padding — breathing room from sidebar */
+  color: #fff;
+  box-sizing: border-box;
+}
+
+/* ═══════════════════════════════════════
+   HEADER SECTION
+═══════════════════════════════════════ */
+.profile-header-section {
+  margin-bottom: 28px;
+}
+
+/* Row 1: avatar + text info side by side */
+.profile-top-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 48px;
+  margin-bottom: 20px;
+}
+
+/* ── AVATAR ── */
+.profile-avatar-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.profile-avatar-circle {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  background: #3d3d3d;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  overflow: hidden;
+  position: relative;
+}
+.profile-avatar-circle:hover {
+  opacity: 0.85;
+}
+.profile-avatar-circle img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+/* Camera icon — centered in the grey circle */
+.avatar-cam-overlay {
+  font-size: 34px;
+  color: #bbb;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -55%);
+  z-index: 2;
+}
+
+/* Person silhouette — large, sits at the bottom half */
+.avatar-person-icon {
+  font-size: 72px;
+  color: #5a5a5a;
+  position: absolute;
+  bottom: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+/* ── PROFILE INFO ── */
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 6px;
+}
+
+/* username + badge row */
+.username-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+.profile-username {
+  font-size: 20px;
+  font-weight: 300;
+  letter-spacing: -0.2px;
+}
+/* Hollow circle verified icon (pending badge style from screenshot) */
+.pending-badge {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+/* Display name - amber colored like screenshot */
+.display-name {
+  font-size: 14px;
+  font-weight: 400;
+  color: #e8a87c;
+}
+
+/* Stats inline */
+.profile-stats {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-top: 2px;
+}
+.stat-item {
+  font-size: 14px;
+  font-weight: 400;
+  color: #f0f0f0;
+  margin-right: 24px;
+}
+.stat-item strong {
+  font-weight: 700;
+  color: #fff;
+}
+
+/* Row 2: Action buttons — full width of header */
+.profile-buttons {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  max-width: 480px; /* roughly the span of avatar + info */
+}
+
+.btn-action {
+  flex: 1;
+  background: #262626;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 8px 0;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: "Inter", sans-serif;
+  transition: background 0.2s;
+}
+.btn-action:hover {
+  background: #3a3a3a;
+}
+
+/* ═══════════════════════════════════════
+   STORY HIGHLIGHTS
+═══════════════════════════════════════ */
+.highlights-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 20px 0 24px;
+  /* NO border-bottom here — the tabs section provides the single divider line */
+  overflow-x: auto;
+}
+
+.highlight-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.highlight-circle {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: #1a1a1a;
+  border: 1px solid #404040;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.highlight-item:hover .highlight-circle {
+  border-color: #888;
+  transform: scale(1.04);
+}
+.highlight-plus {
+  font-size: 28px;
+  color: #ccc;
+  font-weight: 300;
+  line-height: 1;
+}
+.highlight-label {
+  font-size: 12px;
+  color: #ccc;
+  text-align: center;
+}
+
+/* ═══════════════════════════════════════
+   TABS
+═══════════════════════════════════════ */
+.profile-tabs {
+  display: flex;
+  justify-content: center;
+  border-top: 1px solid #262626;  /* single divider line */
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+.tab-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 48px;
+  color: #666;
+  cursor: pointer;
+  border: none;
+  border-top: 2px solid transparent;
+  background: transparent;
+  transition: color 0.2s, border-color 0.2s;
+  margin-top: -1px;
+}
+.tab-btn:hover {
+  color: #ccc;
+}
+.tab-btn.active {
+  color: #fff;
+  border-top: 2px solid #fff;
+}
+.tab-btn svg {
+  width: 22px;
+  height: 22px;
+}
+
+/* ═══════════════════════════════════════
+   TAB PANELS
+═══════════════════════════════════════ */
+.tab-panel {
+  display: none;
+}
+.tab-panel.active {
+  display: block;
+}
+
+/* ═══════════════════════════════════════
+   POSTS GRID
+═══════════════════════════════════════ */
+.posts-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3px;
+}
+.post-cell {
+  aspect-ratio: 1;
+  background: #1a1a1a;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+}
+.post-cell img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+.post-cell:hover img {
+  transform: scale(1.06);
+}
+.post-cell-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  transition: opacity 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  color: #fff;
+  font-weight: 700;
+  font-size: 15px;
+}
+.post-cell:hover .post-cell-overlay {
+  opacity: 1;
+}
+.overlay-stat {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Getting started (empty posts) */
+.getting-started-box {
+  border: 1px solid #262626;
+  border-radius: 10px;
+  padding: 28px 24px;
+  margin-top: 16px;
+}
+.getting-started-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #eee;
+  margin-bottom: 20px;
+  letter-spacing: 0.3px;
+}
+.gs-cards {
+  display: flex;
+  gap: 16px;
+}
+.gs-card {
+  flex: 1;
+  background: #0a0a0a;
+  border: 1px solid #222;
+  border-radius: 10px;
+  padding: 22px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.gs-card:hover {
+  border-color: #555;
+  transform: translateY(-2px);
+}
+.gs-card-icon {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  border: 2px solid #555;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+.gs-card-icon svg {
+  width: 24px;
+  height: 24px;
+  color: #fff;
+}
+.gs-card-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+}
+.gs-card-desc {
+  font-size: 13px;
+  color: #888;
+  line-height: 1.5;
+}
+.gs-card-btn {
+  margin-top: 6px;
+  background: #0095f6;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 7px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: "Inter", sans-serif;
+  transition: background 0.2s;
+}
+.gs-card-btn:hover {
+  background: #1aa4ff;
+}
+
+/* ═══════════════════════════════════════
+   SAVED TAB
+═══════════════════════════════════════ */
+.saved-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0 12px;
+  border-bottom: 1px solid #1a1a1a;
+  margin-bottom: 4px;
+}
+.saved-header-note {
+  font-size: 13px;
+  color: #888;
+}
+.saved-header-link {
+  font-size: 14px;
+  color: #0095f6;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+}
+.saved-header-link:hover {
+  color: #4db5ff;
+}
+
+/* ═══════════════════════════════════════
+   EMPTY STATE (Saved / Tagged)
+═══════════════════════════════════════ */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 72px 20px 60px;
+  gap: 12px;
+}
+.empty-icon-ring {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+.empty-icon-ring svg {
+  width: 36px;
+  height: 36px;
+}
+.empty-title {
+  font-size: 24px;
+  font-weight: 800;
+  color: #fff;
+}
+.empty-subtitle {
+  font-size: 14px;
+  color: #aaa;
+  text-align: center;
+  max-width: 360px;
+  line-height: 1.6;
+}
+.empty-subtitle strong {
+  color: #fff;
+  font-weight: 600;
+}

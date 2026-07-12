@@ -210,74 +210,8 @@
       {% endfor %}
     </div>
     {% endif %}
-    <!-- ── LEFT SIDEBAR ── -->
-    <aside id="sidebar">
-      <!-- Logo -->
-      <a href="/" class="ig-logo-icon nav-item" style="margin-bottom: 8px">
-        <svg
-          class="ig-logo-svg"
-          xmlns="http://www.w3.org/2000/svg"
-          width="28"
-          height="28"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="#fff"
-          stroke-width="1.8"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <rect x="2" y="2" width="20" height="20" rx="5" />
-          <circle cx="12" cy="12" r="4" />
-          <circle cx="17.5" cy="6.5" r="1.1" fill="#fff" stroke="none" />
-        </svg>
-        <span class="ig-logo-text">Instagram</span>
-      </a>
-
-      <!-- Nav links -->
-      <nav style="display: flex; flex-direction: column; flex: 1">
-        <a href="/" class="nav-item active" id="nav-home">
-          <span
-            class="material-symbols-outlined"
-            style="font-variation-settings: &quot;FILL&quot; 1"
-            >home</span
-          >
-          <span class="nav-label">Home</span>
-        </a>
-        <a href="#" class="nav-item" id="nav-reels">
-          <span class="material-symbols-outlined">smart_display</span>
-          <span class="nav-label">Reels</span>
-        </a>
-        <a href="#" class="nav-item" id="nav-messages">
-          <span class="material-symbols-outlined">send</span>
-          <span class="nav-label">Messages</span>
-        </a>
-        <a href="#" class="nav-item" id="nav-search">
-          <span class="material-symbols-outlined">search</span>
-          <span class="nav-label">Search</span>
-        </a>
-        <a href="#" class="nav-item" id="nav-notifications">
-          <span class="material-symbols-outlined">favorite</span>
-          <span class="nav-label">Notifications</span>
-        </a>
-        <a href="{% url 'create-post' %}" class="nav-item" id="nav-create">
-          <span class="material-symbols-outlined">add_box</span>
-          <span class="nav-label">Create</span>
-        </a>
-        <a href="{% url 'create-profile' %}" class="nav-item" id="nav-profile">
-          <span class="material-symbols-outlined">account_circle</span>
-          <span class="nav-label">Profile</span>
-        </a>
-        <div class="nav-spacer"></div>
-        <a href="#" class="nav-item" id="nav-more">
-          <span class="material-symbols-outlined">menu</span>
-          <span class="nav-label">More</span>
-        </a>
-        <a href="#" class="nav-item" id="nav-meta">
-          <span class="material-symbols-outlined">apps</span>
-          <span class="nav-label">Also from Meta</span>
-        </a>
-      </nav>
-    </aside>
+    <!-- left sidebar -->
+    {% include 'aside.html' %}
 
     <!-- ── MAIN CONTENT ── -->
     <div id="main-wrapper">

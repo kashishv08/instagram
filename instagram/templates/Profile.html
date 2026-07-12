@@ -1,0 +1,266 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+
+<link rel="stylesheet" href="{% static 'profile.css' %}" />
+
+<div class="profile-page">
+  <div class="profile-header-section">
+    <!-- Row 1: Avatar + Info -->
+    <div class="profile-top-row">
+      <!-- Avatar -->
+      <div class="profile-avatar-wrap">
+        <div class="profile-avatar-circle">
+          {% if request.user.profile.avatar %}
+          <img src="{{ request.user.profile.avatar.url }}" alt="avatar" style="width:100%; height:100%; object-fit:cover; border-radius:50%;" />
+          {% else %}
+          <!-- Default placeholder (person + camera icons layered) -->
+          <span class="material-symbols-outlined avatar-person-icon"
+            >person</span
+          >
+          <span class="material-symbols-outlined avatar-cam-overlay"
+            >photo_camera</span
+          >
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Profile Info -->
+      <div class="profile-info">
+        <!-- Username + verified badge -->
+        <div class="username-row">
+          <span class="profile-username">{{request.user.username}}</span>
+          <!-- Hollow-circle pending verified icon (matches screenshot) -->
+          <svg
+            class="pending-badge"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#aaa"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <path d="M8.5 12.5l2.5 2.5 4.5-4.5" />
+          </svg>
+        </div>
+
+        <!-- Display name (amber/warm like screenshot) -->
+        <div class="display-name">{{request.user.profile.bio}}</div>
+
+        <!-- Stats: 0 posts · 0 followers · 2 following (inline) -->
+        <div class="profile-stats">
+          <span class="stat-item"
+            ><strong>{{request.user.post_set.count}}</strong> Posts
+          </span>
+          <span class="stat-item"
+            ><strong>{{request.user.profile.followers.count}}</strong> Followers
+          </span>
+          <span class="stat-item"
+            ><strong>{{request.user.profile.following.count}}</strong>
+            following</span
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 2: Action buttons (full-width spanning avatar+info) -->
+    <div class="profile-buttons">
+      <a
+        href="{% url 'edit-profile' %}"
+        class="btn-action"
+        id="btn-edit-profile"
+        >Edit profile</a
+      >
+      <button class="btn-action" id="btn-view-archive">View archive</button>
+    </div>
+  </div>
+  <!-- /profile-header-section -->
+
+  <div class="highlights-row">
+    <div class="highlight-item" id="highlight-new">
+      <div class="highlight-circle">
+        <span class="highlight-plus">+</span>
+      </div>
+      <span class="highlight-label">New</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       TABS
+  ══════════════════════════════ -->
+  <div class="profile-tabs">
+    <!-- Posts grid icon -->
+    <button class="tab-btn active" id="tab-posts" onclick="switchTab('posts')">
+      <svg viewBox="0 0 24 24" fill="currentColor">
+        <rect x="3" y="3" width="7" height="7" rx="0.5" />
+        <rect x="14" y="3" width="7" height="7" rx="0.5" />
+        <rect x="3" y="14" width="7" height="7" rx="0.5" />
+        <rect x="14" y="14" width="7" height="7" rx="0.5" />
+      </svg>
+    </button>
+
+    <!-- Saved bookmark icon -->
+    <button class="tab-btn" id="tab-saved" onclick="switchTab('saved')">
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z" />
+      </svg>
+    </button>
+
+    <!-- Tagged person icon -->
+    <button class="tab-btn" id="tab-tagged" onclick="switchTab('tagged')">
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <rect x="3" y="3" width="18" height="18" rx="3" />
+        <circle cx="12" cy="10" r="3" />
+        <path d="M7 21v-1a5 5 0 0110 0v1" />
+      </svg>
+    </button>
+  </div>
+
+  <!-- ══════════════════════════════
+       POSTS PANEL
+  ══════════════════════════════ -->
+  <div class="tab-panel active" id="panel-posts">
+    <div class="getting-started-box">
+      <div class="getting-started-title">Getting Started</div>
+      <div class="gs-cards">
+        <!-- Share Photos card -->
+        <div class="gs-card" id="gs-share-photo">
+          <div class="gs-card-icon">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <rect x="3" y="3" width="18" height="18" rx="3" />
+              <circle cx="8.5" cy="8.5" r="1.5" />
+              <path d="M21 15l-5-5L5 21" />
+            </svg>
+          </div>
+          <div class="gs-card-title">Share Photos</div>
+          <div class="gs-card-desc">
+            When you share photos, they will appear on your profile.
+          </div>
+          <button class="gs-card-btn" id="btn-share-first-photo">
+            Share your first photo
+          </button>
+        </div>
+
+        <!-- Add Profile Photo card -->
+        <div class="gs-card" id="gs-add-profile-photo">
+          <div class="gs-card-icon">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"
+              />
+              <circle cx="12" cy="13" r="4" />
+            </svg>
+          </div>
+          <div class="gs-card-title">Add Profile Photo</div>
+          <div class="gs-card-desc">
+            Add a profile photo so your friends know it's you.
+          </div>
+          <button class="gs-card-btn" id="btn-add-profile-photo">
+            Add profile photo
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       SAVED PANEL
+  ══════════════════════════════ -->
+  <div class="tab-panel" id="panel-saved">
+    <div class="saved-header">
+      <span class="saved-header-note">Only you can see what you've saved</span>
+      <a class="saved-header-link" id="link-new-collection" href="#"
+        >+ New Collection</a
+      >
+    </div>
+    <div class="empty-state">
+      <div class="empty-icon-ring">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="white"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z" />
+        </svg>
+      </div>
+      <div class="empty-title">Save</div>
+      <div class="empty-subtitle">
+        Save photos and videos that you want to see again.
+        <strong>No one is notified,</strong> and only you can see what you've
+        saved.
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       TAGGED PANEL
+  ══════════════════════════════ -->
+  <div class="tab-panel" id="panel-tagged">
+    <div class="empty-state">
+      <div class="empty-icon-ring">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="white"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect x="3" y="3" width="18" height="18" rx="3" />
+          <circle cx="12" cy="10" r="3" />
+          <path d="M7 21v-1a5 5 0 0110 0v1" />
+        </svg>
+      </div>
+      <div class="empty-title">Photos of you</div>
+      <div class="empty-subtitle">
+        When people tag you in photos, they'll appear here.
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /profile-page -->
+
+<script>
+  function switchTab(name) {
+    document
+      .querySelectorAll(".tab-btn")
+      .forEach((b) => b.classList.remove("active"));
+    document
+      .querySelectorAll(".tab-panel")
+      .forEach((p) => p.classList.remove("active"));
+    document.getElementById("tab-" + name).classList.add("active");
+    document.getElementById("panel-" + name).classList.add("active");
+  }
+</script>
+
+{% endblock %}
