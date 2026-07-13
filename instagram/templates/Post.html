@@ -1,221 +1,30 @@
-<style>
-  .post-card {
-    border-bottom: 1px solid #262626;
-    padding: 4px 0 12px;
-  }
-  .post-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 0 8px;
-  }
-  .post-avatar {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    object-fit: cover;
-    flex-shrink: 0;
-  }
-  .post-header-info {
-    flex: 1;
-    min-width: 0;
-  }
-  .post-username-row {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-  .post-uname {
-    font-size: 14px;
-    font-weight: 600;
-    color: #fff;
-  }
-  .post-dot {
-    color: #a8a8a8;
-    font-size: 12px;
-  }
-  .post-time {
-    font-size: 12px;
-    color: #a8a8a8;
-  }
-  .post-location {
-    font-size: 12px;
-    color: #a8a8a8;
-  }
-  .post-more-btn {
-    background: none;
-    border: none;
-    color: #fff;
-    cursor: pointer;
-    margin-left: auto;
-    padding: 4px 8px;
-    font-size: 20px;
-    line-height: 1;
-    letter-spacing: 1px;
-  }
-  .post-follow-btn {
-    background: none;
-    border: none;
-    color: #0095f6;
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-    padding: 0 4px;
-    letter-spacing: 0.1px;
-    transition: color 0.15s;
-  }
-  .post-follow-btn:hover {
-    color: #4db5ff;
-  }
-  .verified-icon {
-    color: #0095f6;
-    font-size: 14px;
-    font-variation-settings: "FILL" 1;
-    vertical-align: middle;
-  }
+{% load static %}
+<link rel="stylesheet" href="{% static 'post.css' %}" />
 
-  /* Image carousel */
-  .post-img-wrap {
-    position: relative;
-    overflow: hidden;
-    background: #111;
-  }
-  .post-img-wrap img {
-    width: 100%;
-    display: block;
-    max-height: 600px;
-    object-fit: cover;
-  }
-  .carousel-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(255, 255, 255, 0.85);
-    border: none;
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #000;
-    font-size: 18px;
-  }
-  .carousel-btn.right {
-    right: 10px;
-  }
-  .carousel-btn.left {
-    left: 10px;
-  }
-  .carousel-dots {
-    display: flex;
-    justify-content: center;
-    gap: 4px;
-    padding: 6px 0 2px;
-  }
-  .carousel-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: #a8a8a8;
-  }
-  .carousel-dot.active {
-    background: #0095f6;
-  }
-
-  /* Actions */
-  .post-actions {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 8px 0 4px;
-  }
-  .action-btn {
-    background: none;
-    border: none;
-    color: #fff;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    padding: 2px;
-    transition: transform 0.1s;
-  }
-  .action-btn:hover {
-    transform: scale(1.1);
-  }
-  .action-btn .material-symbols-outlined {
-    font-size: 26px;
-  }
-  .post-bookmark {
-    margin-left: auto;
-  }
-
-  .post-likes {
-    font-size: 14px;
-    font-weight: 600;
-    padding: 2px 0;
-  }
-  .post-caption {
-    font-size: 14px;
-    line-height: 1.5;
-    padding: 2px 0;
-  }
-  .post-caption .cap-user {
-    font-weight: 600;
-    margin-right: 4px;
-  }
-  .post-comments-link {
-    font-size: 14px;
-    color: #a8a8a8;
-    cursor: pointer;
-    padding: 2px 0;
-  }
-  .post-timestamp {
-    font-size: 11px;
-    color: #a8a8a8;
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
-    padding: 2px 0 4px;
-  }
-  .material-symbols-outlined.filled {
-    font-variation-settings: "FILL" 1;
-  }
-</style>
-
-<!-- POST 1 -->
-{% for post in posts%}
+{% for post in posts %}
 <article class="post-card">
   <header class="post-header">
     <img
       class="post-avatar"
-      src="{{post.user.profile.avatar.url}}"
-      alt="{{post.user.username}}"
+      src="{{ post.user.profile.avatar.url }}"
+      alt="{{ post.user.username }}"
     />
     <div class="post-header-info">
       <div class="post-username-row">
         <a
           href="{% url 'view-profile' post.user.profile.id %}"
           class="post-uname"
-          >{{post.user.username}}</a
+          >{{ post.user.username }}</a
         >
-        <span class="material-symbols-outlined verified-icon">verified </span>
+        <span class="material-symbols-outlined verified-icon">verified</span>
         <span class="post-dot">·</span>
-        <span class="post-time">{{post.created_at}}</span>
+        <span class="post-time">{{ post.created_at }}</span>
       </div>
       <div class="post-location">Amsterdam, Netherlands</div>
     </div>
 
     <!-- Follow btn + ··· dropdown -->
-    <div
-      style="
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        margin-left: auto;
-        position: relative;
-      "
-    >
+    <div style="display: flex; align-items: center; gap: 6px; margin-left: auto; position: relative;">
       <!-- Follow button -->
       <!-- prettier-ignore -->
       {% if post.user.profile not in request.user.profile.following.all and post.user.profile != request.user.profile %}
@@ -232,80 +41,22 @@
         <summary
           class="post-more-btn"
           style="list-style: none; cursor: pointer"
+          >···</summary
         >
-          ···
-        </summary>
-        <ul
-          style="
-            position: absolute;
-            right: 0;
-            top: 100%;
-            background: #262626;
-            border-radius: 12px;
-            border: 1px solid #3a3a3a;
-            overflow: hidden;
-            min-width: 180px;
-            z-index: 50;
-            padding: 4px 0;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
-            list-style: none;
-            margin: 0;
-          "
-        >
+        <ul class="post-dropdown-menu">
           <!-- Unfollow -->
           <!-- prettier-ignore -->
           {% if post.user.profile in request.user.profile.following.all and post.user.profile != request.user.profile %}
           <li>
-            <a
-              href="{% url 'follow' post.id %}"
-              style="
-                display: block;
-                padding: 12px 16px;
-                font-size: 14px;
-                font-weight: 400;
-                color: #fff;
-                text-decoration: none;
-                transition: background 0.15s;
-              "
-              onmouseover="this.style.background = '#3a3a3a'"
-              onmouseout="this.style.background = 'transparent'"
-              >Unfollow</a
-            >
+            <a href="{% url 'follow' post.id %}">Unfollow</a>
           </li>
-          {% endif %} {% if post.user.profile == request.user.profile %}
-          <li style="border-top: 1px solid #3a3a3a">
-            <a
-              href="{% url 'edit-post' post.id %}"
-              style="
-                display: block;
-                padding: 12px 16px;
-                font-size: 14px;
-                font-weight: 400;
-                color: #fff;
-                text-decoration: none;
-                transition: background 0.15s;
-              "
-              onmouseover="this.style.background = '#3a3a3a'"
-              onmouseout="this.style.background = 'transparent'"
-              >Edit post</a
-            >
+          {% endif %}
+          {% if post.user.profile == request.user.profile %}
+          <li>
+            <a href="{% url 'edit-post' post.id %}">Edit post</a>
           </li>
-          <li style="border-top: 1px solid #3a3a3a">
-            <a
-              href="{% url 'delete-post' post.id %}"
-              style="
-                display: block;
-                padding: 12px 16px;
-                font-size: 14px;
-                font-weight: 600;
-                color: #ed4956;
-                text-decoration: none;
-                transition: background 0.15s;
-              "
-              onmouseover="this.style.background = '#3a3a3a'"
-              onmouseout="this.style.background = 'transparent'"
-              >Delete post</a
-            >
+          <li>
+            <a href="{% url 'delete-post' post.id %}" class="danger">Delete post</a>
           </li>
           {% endif %}
         </ul>
@@ -314,31 +65,15 @@
   </header>
 
   <div class="post-img-wrap">
-    <img src="{{post.attachment.url}}" alt="Post image" />
-    <button class="carousel-btn right">
-      <span class="material-symbols-outlined" style="font-size: 16px"
-        >chevron_right</span
-      >
-    </button>
-    <div
-      class="carousel-dots"
-      style="position: absolute; bottom: 10px; left: 0; right: 0"
-    >
-      <div class="carousel-dot active"></div>
-      <div class="carousel-dot"></div>
-      <div class="carousel-dot"></div>
-      <div class="carousel-dot"></div>
-    </div>
+    <img src="{{ post.attachment.url }}" alt="Post image" />
   </div>
 
   <div class="post-actions">
     <form action="{% url 'like-post' post.id %}" method="post">
-      {%csrf_token%}
-      <button class="action-btn" title="Like" type="submit">
+      {% csrf_token %}
+      <button class="action-btn{% if request.user in post.likes.all %} liked{% endif %}" title="Like" type="submit">
         {% if request.user in post.likes.all %}
-        <span class="material-symbols-outlined" style="color: red"
-          >favorite</span
-        >
+        <span class="material-symbols-outlined filled" style="color: #ed4956">favorite</span>
         {% else %}
         <span class="material-symbols-outlined">favorite_border</span>
         {% endif %}
@@ -361,13 +96,14 @@
       </button>
     </form>
   </div>
-  <div class="post-likes">{{post.like_counts}} likes</div>
+
+  <div class="post-likes">{{ post.like_counts }} likes</div>
   <div class="post-caption">
-    <span class="cap-user">{{post.user.username}}</span
-    ><span class="material-symbols-outlined verified-icon">verified </span
-    >{{post.caption}}
+    <a href="{% url 'view-profile' post.user.profile.id %}" class="cap-user">{{ post.user.username }}</a
+    ><span class="material-symbols-outlined verified-icon">verified</span>
+    {{ post.caption }}
   </div>
-  <div class="post-comments-link">View all 2,541 comments</div>
-  <div class="post-timestamp">{{post.created_at}}</div>
+  <div class="post-comments-link">View all comments</div>
+  <div class="post-timestamp">{{ post.created_at }}</div>
 </article>
 {% endfor %}

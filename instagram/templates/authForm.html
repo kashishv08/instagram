@@ -4,18 +4,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Instagram</title>
+    <title>{% if is_login %}Log in{% else %}Sign up{% endif %} · Instagram</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Dancing+Script:wght@700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Dancing+Script:wght@700&display=swap"
       rel="stylesheet"
     />
     <link
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
       rel="stylesheet"
     />
-
     <link rel="stylesheet" href="{% static 'authForm.css' %}" />
   </head>
   <body>
@@ -52,18 +51,23 @@
         <div class="form-container">
           <!-- prettier-ignore -->
           <div class="form-title">
-            {% if is_login %}Log into Instagram{% else %}Create an Account{% endif %}
+            {% if is_login %}Welcome back{% else %}Create an account{% endif %}
+          </div>
+          <div class="form-subtitle">
+            {% if is_login %}Log in to see photos and videos from your friends.{% else %}Sign up to see photos and videos from your friends.{% endif %}
           </div>
 
           <form
             method="POST"
-            action="{% if is_login %} {% url 'login-user' %} {% else %} {% url 'register-user' %} {% endif %}"
+            action="{% if is_login %}{% url 'login-user' %}{% else %}{% url 'register-user' %}{% endif %}"
             class="auth-form"
           >
-            {% csrf_token %}{{ form.username }} {{ form.password }}
+            {% csrf_token %}
+            {{ form.username }}
+            {{ form.password }}
 
             <button type="submit" class="btn-primary">
-              {% if is_login %}Log in{% else %}Sign Up{% endif %}
+              {% if is_login %}Log in{% else %}Sign up{% endif %}
             </button>
           </form>
 
@@ -72,13 +76,15 @@
             <!-- <a href="#">Forgot password?</a> -->
           </div>
           {% else %}
-          <div style="height: 24px"></div>
+          <div style="height: 20px"></div>
           {% endif %}
+
           <!-- prettier-ignore -->
-          <a href="{% if is_login %}{% url 'register-user' %}{% else %}{% url 'login-user' %}{% endif %}">
-            <button class="btn-outline">
-              {% if is_login %}Create new account{% else %}Log into existing account{% endif %}
-            </button>
+          <a
+            href="{% if is_login %}{% url 'register-user' %}{% else %}{% url 'login-user' %}{% endif %}"
+            class="btn-outline"
+          >
+            {% if is_login %}Create new account{% else %}Log into existing account{% endif %}
           </a>
 
           <div class="meta-logo">

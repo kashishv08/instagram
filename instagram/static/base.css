@@ -25,39 +25,44 @@ body {
   width: 72px;
   background: #000;
   border-right: 1px solid #262626;
-  z-index: 100;
+  z-index: 200;
   display: flex;
   flex-direction: column;
   padding: 8px 0 16px;
-  transition: width 0.2s;
+  transition: width 0.25s ease;
+  overflow: hidden;
 }
-@media (min-width: 1264px) {
-  #sidebar {
-    width: 245px;
-  }
+#sidebar:hover {
+  width: 245px;
 }
 
 .ig-logo-icon {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   height: 72px;
   padding: 0 12px;
+  gap: 16px;
 }
 .ig-logo-text {
   font-family: "Grand Hotel", cursive;
   font-size: 32px;
   font-weight: 400;
   color: #fff;
-  display: none;
+  /* always rendered but hidden via opacity/width when sidebar is collapsed */
+  opacity: 0;
+  white-space: nowrap;
+  transition: opacity 0.15s ease 0s;
+  pointer-events: none;
 }
-@media (min-width: 1264px) {
-  .ig-logo-text {
-    display: block;
-  }
-  .ig-logo-svg {
-    display: none;
-  }
+#sidebar:hover .ig-logo-text {
+  opacity: 1;
+  transition-delay: 0.1s;
+}
+/* Always show the small logo image */
+.ig-logo-svg {
+  display: block;
+  flex-shrink: 0;
 }
 
 .nav-item {
@@ -78,16 +83,20 @@ body {
 }
 .nav-item .nav-label {
   font-size: 15px;
-  display: none;
   font-weight: 400;
+  /* always in DOM, fades in when sidebar expands */
+  opacity: 0;
+  white-space: nowrap;
+  transition: opacity 0.1s ease 0s;
+  pointer-events: none;
 }
 .nav-item.active .nav-label {
   font-weight: 600;
 }
-@media (min-width: 1264px) {
-  .nav-item .nav-label {
-    display: block;
-  }
+#sidebar:hover .nav-item .nav-label {
+  opacity: 1;
+  transition-delay: 0.1s;
+  pointer-events: auto;
 }
 .nav-item .material-symbols-outlined {
   font-size: 26px;
@@ -98,36 +107,36 @@ body {
 }
 
 /* ── MAIN WRAPPER ── */
+/* Always offset by the collapsed sidebar width only.
+   The sidebar overlays on hover — no layout shift. */
 #main-wrapper {
   margin-left: 72px;
   min-height: 100vh;
   display: flex;
   justify-content: center;
 }
-@media (min-width: 1264px) {
-  #main-wrapper {
-    margin-left: 245px;
-  }
-}
 
 #content-area {
   display: flex;
-  gap: 56px;
+  gap: 32px;
   width: 100%;
-  max-width: 850px;
-  padding: 0 16px;
+  max-width: 980px;
+  padding: 0 24px;
   align-items: flex-start;
 }
 
 #center-feed {
   flex: 1;
-  max-width: 470px;
+  max-width: 500px;
   min-width: 0;
   padding-top: 8px;
 }
 
 #right-panel {
-  width: 320px;
+  /* grow to fill whatever space is left after the feed column */
+  flex: 1;
+  min-width: 280px;
+  max-width: 380px;
   flex-shrink: 0;
   padding-top: 24px;
   position: sticky;
@@ -136,7 +145,7 @@ body {
   overflow-y: auto;
   display: none;
 }
-@media (min-width: 1024px) {
+@media (min-width: 900px) {
   #right-panel {
     display: block;
   }

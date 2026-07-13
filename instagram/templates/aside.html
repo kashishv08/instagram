@@ -41,14 +41,25 @@
       <span class="material-symbols-outlined">add_box</span>
       <span class="nav-label">Create</span>
     </a>
+    {% if request.user.is_authenticated %}
+    {% with profile=request.user.profile %}
+    {% if profile and profile.is_onboard %}
     <a
-      href="{% url 'view-profile' request.user.profile.id %}"
+      href="{% url 'view-profile' profile.id %}"
       class="nav-item"
       id="nav-profile"
     >
       <span class="material-symbols-outlined">account_circle</span>
       <span class="nav-label">Profile</span>
     </a>
+    {% else %}
+    <a href="/profile/create" class="nav-item" id="nav-profile">
+      <span class="material-symbols-outlined">account_circle</span>
+      <span class="nav-label">Profile</span>
+    </a>
+    {% endif %}
+    {% endwith %}
+    {% endif %}
     <div class="nav-spacer"></div>
     <a href="#" class="nav-item" id="nav-more">
       <span class="material-symbols-outlined">menu</span>

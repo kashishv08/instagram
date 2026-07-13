@@ -1,22 +1,6 @@
-/* ── RESET ── */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+/* profileform.css — form-specific styles only.
+   Global reset + body handled by base.css */
 
-body {
-  background: #000;
-  color: #fff;
-  font-family: "Inter", sans-serif;
-  min-height: 100vh;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  padding: 32px 16px 80px;
-}
 
 /* ── TOAST ── */
 .toast-wrap {

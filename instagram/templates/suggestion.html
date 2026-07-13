@@ -1,185 +1,68 @@
-<style>
-  .rp-user-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 20px;
-  }
-  .rp-avatar {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    object-fit: cover;
-    flex-shrink: 0;
-  }
-  .rp-username {
-    font-size: 14px;
-    font-weight: 600;
-    color: #fff;
-  }
-  .rp-display {
-    font-size: 13px;
-    color: #a8a8a8;
-  }
-  .rp-switch-btn {
-    margin-left: auto;
-    font-size: 14px;
-    font-weight: 600;
-    color: #0095f6;
-    background: none;
-    border: none;
-    cursor: pointer;
-  }
-
-  .rp-section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 12px;
-  }
-  .rp-section-title {
-    font-size: 14px;
-    font-weight: 600;
-    color: #a8a8a8;
-  }
-  .rp-see-all {
-    font-size: 13px;
-    font-weight: 600;
-    color: #fff;
-    cursor: pointer;
-  }
-
-  .suggestion-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 6px 0;
-  }
-  .sg-avatar {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    object-fit: cover;
-    flex-shrink: 0;
-  }
-  .sg-info {
-    flex: 1;
-    min-width: 0;
-  }
-  .sg-name-row {
-    display: flex;
-    align-items: center;
-    gap: 3px;
-  }
-  .sg-name {
-    font-size: 13px;
-    font-weight: 600;
-    color: #fff;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .sg-verified {
-    color: #0095f6;
-    font-size: 13px;
-    font-variation-settings: "FILL" 1;
-  }
-  .sg-sub {
-    font-size: 12px;
-    color: #a8a8a8;
-  }
-  .sg-follow-btn {
-    font-size: 13px;
-    font-weight: 600;
-    color: #0095f6;
-    background: none;
-    border: none;
-    cursor: pointer;
-    flex-shrink: 0;
-  }
-
-  .rp-footer {
-    margin-top: 20px;
-  }
-  .rp-footer-links {
-    font-size: 11px;
-    color: #a8a8a8;
-    line-height: 1.8;
-  }
-  .rp-footer-links a {
-    color: #a8a8a8;
-    text-decoration: none;
-    margin-right: 4px;
-  }
-  .rp-footer-links a:hover {
-    text-decoration: underline;
-  }
-  .rp-copyright {
-    font-size: 11px;
-    color: #5a5a5a;
-    margin-top: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-</style>
+{% load static %}
+<link rel="stylesheet" href="{% static 'suggestion.css' %}" />
 
 <!-- Current user -->
 <div class="rp-user-row">
   {% if request.user.is_authenticated %}
   <img
     class="rp-avatar"
-    src="{{request.user.profile.avatar.url}}"
+    src="{{ request.user.profile.avatar.url }}"
     alt="profile"
   />
-  <div>
-    <div class="rp-username">{{request.user.username}}</div>
+  <div class="rp-user-info">
+    <div class="rp-username">{{ request.user.username }}</div>
     <div class="rp-display">
-      Followers: {{request.user.profile.followers.count}} following:
-      {{request.user.profile.following.count}}
+      {{ request.user.profile.followers.count }} followers &middot;
+      {{ request.user.profile.following.count }} following
     </div>
   </div>
-  <a class="rp-switch-btn" href="{% url 'logout-user' %}">Logout</a>
-  {% endif %} {% if not request.user.is_authenticated %}
-  <div class="gap-2">
-    <a class="rp-switch-btn" href="{% url 'login-user' %}">Login</a>
-    <a class="rp-switch-btn" href="{% url 'register-user' %}">Signup</a>
+  <a class="rp-switch-btn" href="{% url 'logout-user' %}">Log out</a>
+  {% else %}
+  <div class="rp-auth-cta">
+    <span>Have an account?</span>
+    <a class="rp-switch-btn" href="{% url 'login-user' %}">Log in</a>
+    <a class="rp-switch-btn" href="{% url 'register-user' %}">Sign up</a>
   </div>
   {% endif %}
 </div>
 
 <!-- Suggested for you -->
+{% if users %}
 <div class="rp-section-header">
   <span class="rp-section-title">Suggested for you</span>
   <span class="rp-see-all">See all</span>
 </div>
 
 {% for u in users %}
-<a href="{% url 'view-profile' u.profile.id %}">
-  <div class="suggestion-item">
-    <img class="sg-avatar" src="{{u.profile.avatar.url}}" alt="profile image" />
+{% if u.profile and u.profile.is_onboard %}
+<div class="suggestion-item">
+  <a href="{% url 'view-profile' u.profile.id %}" style="display:contents;">
+    <img class="sg-avatar" src="{{ u.profile.avatar.url }}" alt="{{ u.username }}" />
     <div class="sg-info">
       <div class="sg-name-row">
-        <span class="sg-name">{{u.username}}</span>
+        <span class="sg-name">{{ u.username }}</span>
         <span class="material-symbols-outlined sg-verified">verified</span>
       </div>
-      <div class="sg-sub">Popular</div>
+      <div class="sg-sub">Suggested for you</div>
     </div>
-  </div>
-</a>
+  </a>
+  <!-- prettier-ignore -->
+  {% if request.user.is_authenticated and u.profile in request.user.profile.following.all %}
+  <a href="{% url 'follow' u.id %}" class="sg-follow-btn sg-following-btn">Following</a>
+  {% elif request.user.is_authenticated %}
+  <a href="{% url 'follow' u.id %}" class="sg-follow-btn">Follow</a>
+  {% endif %}
+</div>
+{% endif %}
 {% endfor %}
+{% endif %}
 
 <!-- Footer -->
 <div class="rp-footer">
   <div class="rp-footer-links">
-    <a href="#">About</a>·<a href="#"> Help</a>·<a href="#"> Press</a>·<a
-      href="#"
-    >
-      API</a
-    >·<a href="#"> Jobs</a>·<a href="#"> Privacy</a>·<a href="#"> Terms</a>·<a
-      href="#"
-    >
-      Locations</a
-    >·<a href="#"> Language</a>·<a href="#"> Meta Verified</a>
+    <a href="#">About</a> · <a href="#">Help</a> · <a href="#">Press</a> ·
+    <a href="#">API</a> · <a href="#">Jobs</a> · <a href="#">Privacy</a> ·
+    <a href="#">Terms</a> · <a href="#">Locations</a> · <a href="#">Language</a>
   </div>
   <div class="rp-copyright">© 2026 Instagram from Meta</div>
 </div>

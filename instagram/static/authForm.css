@@ -8,7 +8,7 @@
 body {
   background-color: #000;
   color: #fff;
-  font-family: "Inter", sans-serif;
+  font-family: "Poppins", sans-serif;
   min-height: 100vh;
 }
 a {
@@ -27,12 +27,13 @@ a {
   gap: 8px;
 }
 .toast-msg {
-  background: #262626;
+  background: #1a1a1a;
   color: #fff;
-  border-radius: 8px;
+  border-radius: 10px;
   padding: 12px 20px;
   font-size: 14px;
-  border: 1px solid #444;
+  border: 1px solid #333;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.5);
 }
 
 /* ── LAYOUT ── */
@@ -42,70 +43,73 @@ a {
   min-height: 100vh;
 }
 
-/* LEFT PANEL (Hidden on mobile) */
+/* LEFT PANEL */
 .left-panel {
   flex: 1;
-  background-color: #0a0a0a;
+  background: linear-gradient(135deg, #0a0a0a 0%, #0d0015 100%);
   display: none;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 40px;
-  border-right: 1px solid #262626;
+  border-right: 1px solid #1e1e1e;
   overflow-y: auto;
+  position: relative;
+}
+.left-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 30% 50%, rgba(188,24,136,0.12) 0%, transparent 65%),
+              radial-gradient(ellipse at 70% 20%, rgba(0,149,246,0.08) 0%, transparent 55%);
+  pointer-events: none;
 }
 @media (min-width: 900px) {
-  .left-panel {
-    display: flex;
-  }
+  .left-panel { display: flex; }
 }
 .left-content {
   max-width: 480px;
   text-align: center;
+  position: relative;
+  z-index: 1;
 }
 .logo-icon {
   font-family: "Dancing Script", cursive;
-  font-size: 48px;
-  margin-bottom: 24px;
-  background: -webkit-linear-gradient(
-    45deg,
-    #f09433 0%,
-    #e6683c 25%,
-    #dc2743 50%,
-    #cc2366 75%,
-    #bc1888 100%
-  );
+  font-size: 54px;
+  margin-bottom: 20px;
+  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 .hero-title {
-  font-size: 32px;
+  font-size: 30px;
   font-weight: 500;
-  line-height: 1.3;
-  margin-bottom: 40px;
+  line-height: 1.4;
+  margin-bottom: 36px;
+  color: #e0e0e0;
 }
-.hero-title .highlight-close {
-  color: #ff3040;
-}
-.hero-title .highlight-friends {
-  color: #d212b6;
-}
+.hero-title .highlight-close  { color: #ff3040; }
+.hero-title .highlight-friends { color: #cc2366; }
+
 .hero-illustration {
   width: 100%;
-  max-width: 340px;
-  height: 420px;
-  background: #1a1a1a;
+  max-width: 320px;
+  height: 400px;
+  background: #111;
   border-radius: 24px;
   margin: 0 auto;
   position: relative;
   overflow: hidden;
-  border: 1px solid #333;
+  border: 1px solid #2a2a2a;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
 }
 .hero-illustration img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
+  opacity: 0.9;
 }
 
 /* RIGHT PANEL */
@@ -115,78 +119,92 @@ a {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 24px;
-  background-color: #121212;
+  padding: 32px 24px;
+  background-color: #0a0a0a;
   overflow-y: auto;
 }
 .form-container {
   width: 100%;
   max-width: 380px;
 }
-
 .form-title {
-  font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 24px;
-  color: #f5f5f5;
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #fff;
+}
+.form-subtitle {
+  font-size: 14px;
+  color: #737373;
+  margin-bottom: 28px;
 }
 
 /* ── FORM FIELDS ── */
 .auth-form {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
+.auth-form input[type="text"],
+.auth-form input[type="password"],
 .auth-input {
   width: 100%;
-  background: #121212;
-  border: 1px solid #363636;
-  border-radius: 8px;
-  padding: 12px 14px;
+  background: #1a1a1a;
+  border: 1.5px solid #2a2a2a;
+  border-radius: 10px;
+  padding: 13px 16px;
   font-size: 14px;
+  font-family: "Poppins", sans-serif;
   color: #fff;
   outline: none;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, background 0.2s;
 }
+.auth-form input[type="text"]:focus,
+.auth-form input[type="password"]:focus,
 .auth-input:focus {
-  border-color: #555;
+  border-color: #444;
+  background: #222;
 }
+.auth-form input[type="text"]::placeholder,
+.auth-form input[type="password"]::placeholder,
 .auth-input::placeholder {
-  color: #737373;
+  color: #555;
 }
-/* Fix browser autofill making inputs white */
+/* Fix browser autofill */
 .auth-input:-webkit-autofill,
-.auth-input:-webkit-autofill:hover,
-.auth-input:-webkit-autofill:focus,
-.auth-input:-webkit-autofill:active {
-  -webkit-box-shadow: 0 0 0 30px #121212 inset !important;
+.auth-form input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 30px #1a1a1a inset !important;
   -webkit-text-fill-color: #fff !important;
-  transition: background-color 5000s ease-in-out 0s;
 }
 
 /* ── BUTTONS ── */
 .btn-primary {
-  background: #005c98;
+  background: #0095f6;
   color: #fff;
   border: none;
-  border-radius: 20px;
-  padding: 12px;
+  border-radius: 10px;
+  padding: 13px;
   font-size: 14px;
   font-weight: 600;
+  font-family: "Poppins", sans-serif;
   cursor: pointer;
-  margin-top: 8px;
-  transition: background 0.2s;
+  margin-top: 4px;
+  transition: background 0.2s, transform 0.15s;
+  letter-spacing: 0.02em;
 }
 .btn-primary:hover {
-  background: #006eb8;
+  background: #1aa4ff;
+  transform: translateY(-1px);
+}
+.btn-primary:active {
+  transform: translateY(0);
 }
 
 .forgot-password {
   text-align: center;
-  font-size: 14px;
-  font-weight: 500;
-  color: #e0e0e0;
-  margin: 16px 0 24px;
+  font-size: 13px;
+  color: #737373;
+  margin: 14px 0 20px;
 }
 
 .btn-outline {
@@ -197,45 +215,39 @@ a {
   width: 100%;
   background: transparent;
   color: #e0e0e0;
-  border: 1px solid #363636;
-  border-radius: 20px;
-  padding: 10px;
+  border: 1.5px solid #2a2a2a;
+  border-radius: 10px;
+  padding: 11px;
   font-size: 14px;
   font-weight: 600;
+  font-family: "Poppins", sans-serif;
   cursor: pointer;
-  margin-bottom: 12px;
-  transition: background 0.2s;
+  margin-bottom: 14px;
+  transition: background 0.2s, border-color 0.2s;
+  text-decoration: none;
+  text-align: center;
 }
 .btn-outline:hover {
   background: #1a1a1a;
-}
-.btn-outline.fb-btn {
-  color: #fff;
-}
-.fb-icon {
-  color: #1877f2;
-  font-size: 18px;
-  font-weight: bold;
+  border-color: #444;
 }
 
 .meta-logo {
   text-align: center;
-  margin-top: 40px;
-  color: #737373;
+  margin-top: 36px;
+  color: #555;
   font-size: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 4px;
+  gap: 5px;
 }
-.meta-logo span.material-symbols-outlined {
-  font-size: 18px;
-}
+.meta-logo span.material-symbols-outlined { font-size: 18px; }
 
-/* Error styling for Django forms */
+/* Error styling */
 .errorlist {
   list-style: none;
   color: #ed4956;
   font-size: 12px;
-  margin-bottom: 4px;
+  margin-top: 4px;
 }

@@ -1,159 +1,58 @@
-<style>
-  .rp-user-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 20px;
-  }
-  .rp-avatar {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    object-fit: cover;
-    flex-shrink: 0;
-  }
-  .rp-username {
-    font-size: 14px;
-    font-weight: 600;
-    color: #fff;
-  }
-  .rp-display {
-    font-size: 13px;
-    color: #a8a8a8;
-  }
-  .rp-switch-btn {
-    margin-left: auto;
-    font-size: 14px;
-    font-weight: 600;
-    color: #0095f6;
-    background: none;
-    border: none;
-    cursor: pointer;
-  }
+{% extends 'base.html' %}
+{% load static %}
 
-  .rp-section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 12px;
-  }
-  .rp-section-title {
-    font-size: 14px;
-    font-weight: 600;
-    color: #a8a8a8;
-  }
-  .rp-see-all {
-    font-size: 13px;
-    font-weight: 600;
-    color: #fff;
-    cursor: pointer;
-  }
+{% block content %}
+<link rel="stylesheet" href="{% static 'search.css' %}" />
 
-  .suggestion-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 6px 0;
-  }
-  .sg-avatar {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    object-fit: cover;
-    flex-shrink: 0;
-  }
-  .sg-info {
-    flex: 1;
-    min-width: 0;
-  }
-  .sg-name-row {
-    display: flex;
-    align-items: center;
-    gap: 3px;
-  }
-  .sg-name {
-    font-size: 13px;
-    font-weight: 600;
-    color: #fff;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .sg-verified {
-    color: #0095f6;
-    font-size: 13px;
-    font-variation-settings: "FILL" 1;
-  }
-  .sg-sub {
-    font-size: 12px;
-    color: #a8a8a8;
-  }
-  .sg-follow-btn {
-    font-size: 13px;
-    font-weight: 600;
-    color: #0095f6;
-    background: none;
-    border: none;
-    cursor: pointer;
-    flex-shrink: 0;
-  }
-
-  .rp-footer {
-    margin-top: 20px;
-  }
-  .rp-footer-links {
-    font-size: 11px;
-    color: #a8a8a8;
-    line-height: 1.8;
-  }
-  .rp-footer-links a {
-    color: #a8a8a8;
-    text-decoration: none;
-    margin-right: 4px;
-  }
-  .rp-footer-links a:hover {
-    text-decoration: underline;
-  }
-  .rp-copyright {
-    font-size: 11px;
-    color: #5a5a5a;
-    margin-top: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-</style>
-{% extends 'base.html' %} {% block content %}
-<form action="{% url 'search-user' %}" method="get">
-  <label class="input">
+<!-- Search Form -->
+<form action="{% url 'search-user' %}" method="get" class="search-form">
+  <div class="search-input-wrap">
+    <span class="material-symbols-outlined search-icon-prefix">search</span>
     <input
+      class="search-input-field"
       type="search"
-      required
-      placeholder="Search"
       name="q"
-      style="color: black"
+      placeholder="Search people…"
+      value="{{ search|default:'' }}"
+      autocomplete="off"
     />
-  </label>
-</form>
-{% if search != None %}
-<div>Results for : {{search}}</div>
-{% for u in profiles %}
-<div class="suggestion-item">
-  <img class="sg-avatar" src="{{u.avatar.url}}" alt="user image" />
-  <div class="sg-info">
-    <div class="sg-name-row">
-      <span class="sg-name">{{u.user.username}}</span>
-      <span class="material-symbols-outlined sg-verified">verified</span>
-    </div>
-    <div class="sg-sub">Popular</div>
   </div>
-  <!-- prettier-ignore -->
-  {% if u != request.user.profile %}
-  {% if u in request.user.profile.following.all %}
-  <a href="{% url 'view-profile' u.id %}" class="sg-follow-btn">Following</a>
-  {% else %}
-  <a href="{% url 'follow' u.user.id %}" class="sg-follow-btn">Follow</a>
-  {% endif %} {% endif %}
-</div>
-{% endfor %} {% else %}
-<div>No recent searches</div>
-{% endif %} {% endblock %}
+</form>
+
+{% if search != None %}
+  <div class="search-results-label">Results for "{{ search }}"</div>
+
+  {% for u in profiles %}
+  <div class="search-result-item">
+    <img class="search-result-avatar" src="{{ u.avatar.url }}" alt="{{ u.user.username }}" />
+    <div class="search-result-info">
+      <div class="search-result-name-row">
+        <span class="search-result-username">{{ u.user.username }}</span>
+        <span class="material-symbols-outlined sg-verified">verified</span>
+      </div>
+      <div class="search-result-sub">Popular creator</div>
+    </div>
+    <!-- prettier-ignore -->
+    {% if u != request.user.profile %}
+      {% if u in request.user.profile.following.all %}
+      <a href="{% url 'view-profile' u.id %}" class="sg-follow-btn sg-following-btn">Following</a>
+      {% else %}
+      <a href="{% url 'follow' u.user.id %}" class="sg-follow-btn">Follow</a>
+      {% endif %}
+    {% endif %}
+  </div>
+  {% empty %}
+  <div class="search-empty">
+    <span class="material-symbols-outlined">manage_search</span>
+    <p>No results for "{{ search }}"</p>
+  </div>
+  {% endfor %}
+
+{% else %}
+  <div class="search-empty">
+    <span class="material-symbols-outlined">search</span>
+    <p>No recent searches</p>
+  </div>
+{% endif %}
+
+{% endblock %}

@@ -1,6 +1,15 @@
 {% extends 'base.html' %} {% load static %} {% block content %}
 <link rel="stylesheet" href="{% static 'profileform.css' %}" />
-
+<style>
+  /* Center the form nicely within the feed column */
+  .edit-profile-container {
+    max-width: 520px;
+    padding: 32px 8px 80px;
+  }
+  .edit-title {
+    margin-bottom: 28px;
+  }
+</style>
 <div class="edit-profile-container">
   <!-- Page title -->
 
