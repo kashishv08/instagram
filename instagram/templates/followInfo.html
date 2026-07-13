@@ -1,0 +1,92 @@
+<!-- Modal Overlay -->
+<div
+  id="follow-modal-overlay"
+  class="modal-overlay hidden"
+  onclick="closeFollowModal(event)"
+>
+  <div class="follow-modal" onclick="event.stopPropagation()">
+    <!-- Header -->
+    <div class="follow-modal-header">
+      <h2 id="follow-modal-title">Followers</h2>
+      <button class="close-modal-btn" onclick="closeFollowModal()">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="follow-modal-search">
+      <div class="search-input-wrapper">
+        <span class="material-symbols-outlined search-icon">search</span>
+        <input type="text" placeholder="Search" />
+      </div>
+    </div>
+
+    <!-- Scrollable Body -->
+    <div class="follow-modal-body">
+      <!-- FOLLOWERS LIST -->
+      <div id="followers-list-container" class="hidden">
+        <!-- prettier-ignore -->
+        {% if profile.followers.count > 0 %} 
+        {% for follower in profile.followers.all %}
+        <div class="follow-user-row">
+          <div class="follow-user-avatar">
+            {% if follower.avatar %}
+            <img src="{{ follower.avatar.url }}" alt="avatar" />
+            {% else %}
+            <span class="material-symbols-outlined">person</span>
+            {% endif %}
+          </div>
+          <div class="follow-user-info">
+            <div class="follow-user-username">{{ follower.user.username }}</div>
+          </div>
+        </div>
+        {% endfor %} {% else %}
+        <div class="empty-state">
+          <div class="empty-icon-wrap">
+            <span class="material-symbols-outlined empty-icon-inner"
+              >person_add</span
+            >
+          </div>
+          <h3>Followers</h3>
+          <p>You'll see all the people who follow you here.</p>
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- FOLLOWING LIST -->
+      <div id="following-list-container" class="hidden">
+        <!-- prettier-ignore -->
+        {% if profile.following.count > 0 %} 
+        {% for following_user in profile.following.all %}
+        <div class="follow-user-row">
+          <div class="follow-user-avatar">
+            {% if following_user.avatar %}
+            <img src="{{ following_user.avatar.url }}" alt="avatar" />
+            {% else %}
+            <span class="material-symbols-outlined">person</span>
+            {% endif %}
+          </div>
+          <div class="follow-user-info">
+            <div class="follow-user-username">
+              {{ following_user.user.username }}
+            </div>
+            <div class="follow-user-fullname">
+              {{ following_user.user.get_full_name }}
+            </div>
+          </div>
+        </div>
+        {% endfor %} {% else %}
+        <div class="empty-state">
+          <div class="empty-icon-wrap">
+            <span class="material-symbols-outlined empty-icon-inner"
+              >person_add</span
+            >
+          </div>
+          <h3>Following</h3>
+          <p>You'll see all the people you follow here.</p>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>

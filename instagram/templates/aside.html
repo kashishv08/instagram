@@ -2,22 +2,12 @@
 <aside id="sidebar">
   <!-- Logo -->
   <a href="/" class="ig-logo-icon nav-item" style="margin-bottom: 8px">
-    <svg
-      class="ig-logo-svg"
-      xmlns="http://www.w3.org/2000/svg"
-      width="28"
-      height="28"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="#fff"
-      stroke-width="1.8"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    >
-      <rect x="2" y="2" width="20" height="20" rx="5" />
-      <circle cx="12" cy="12" r="4" />
-      <circle cx="17.5" cy="6.5" r="1.1" fill="#fff" stroke="none" />
-    </svg>
+    <img
+      height="40"
+      width="40"
+      src="https://static.vecteezy.com/system/resources/previews/021/495/954/large_2x/instagram-logo-icon-free-png.png"
+      alt=""
+    />
     <span class="ig-logo-text">Instagram</span>
   </a>
 
@@ -39,7 +29,7 @@
       <span class="material-symbols-outlined">send</span>
       <span class="nav-label">Messages</span>
     </a>
-    <a href="#" class="nav-item" id="nav-search">
+    <a href="{% url 'search-user' %}" class="nav-item" id="nav-search">
       <span class="material-symbols-outlined">search</span>
       <span class="nav-label">Search</span>
     </a>
@@ -51,7 +41,11 @@
       <span class="material-symbols-outlined">add_box</span>
       <span class="nav-label">Create</span>
     </a>
-    <a href="{% url 'view-profile' %}" class="nav-item" id="nav-profile">
+    <a
+      href="{% url 'view-profile' request.user.profile.id %}"
+      class="nav-item"
+      id="nav-profile"
+    >
       <span class="material-symbols-outlined">account_circle</span>
       <span class="nav-label">Profile</span>
     </a>

@@ -178,6 +178,9 @@
     letter-spacing: 0.02em;
     padding: 2px 0 4px;
   }
+  .material-symbols-outlined.filled {
+    font-variation-settings: "FILL" 1;
+  }
 </style>
 
 <!-- POST 1 -->
@@ -191,7 +194,11 @@
     />
     <div class="post-header-info">
       <div class="post-username-row">
-        <span class="post-uname">{{post.user.username}}</span>
+        <a
+          href="{% url 'view-profile' post.user.profile.id %}"
+          class="post-uname"
+          >{{post.user.username}}</a
+        >
         <span class="material-symbols-outlined verified-icon">verified </span>
         <span class="post-dot">·</span>
         <span class="post-time">{{post.created_at}}</span>
@@ -213,7 +220,7 @@
       <!-- prettier-ignore -->
       {% if post.user.profile not in request.user.profile.following.all and post.user.profile != request.user.profile %}
       <a
-        href="{% url 'follow' post.id %}"
+        href="{% url 'follow' post.user.profile.id %}"
         class="post-follow-btn"
         id="follow-btn-{{ post.id }}"
         >Follow</a
@@ -285,7 +292,7 @@
           </li>
           <li style="border-top: 1px solid #3a3a3a">
             <a
-              href="#"
+              href="{% url 'delete-post' post.id %}"
               style="
                 display: block;
                 padding: 12px 16px;
@@ -343,9 +350,16 @@
     <button class="action-btn" title="Share">
       <span class="material-symbols-outlined">send</span>
     </button>
-    <button class="action-btn post-bookmark" title="Save">
-      <span class="material-symbols-outlined">bookmark_border</span>
-    </button>
+    <form action="{% url 'save-post' post.id %}" method="POST">
+      {% csrf_token %}
+      <button class="action-btn post-bookmark" title="Save" type="submit">
+        {% if request.user in post.is_save.all %}
+        <span class="material-symbols-outlined filled">bookmark</span>
+        {% else %}
+        <span class="material-symbols-outlined">bookmark_border</span>
+        {% endif %}
+      </button>
+    </form>
   </div>
   <div class="post-likes">{{post.like_counts}} likes</div>
   <div class="post-caption">

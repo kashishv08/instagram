@@ -1,13 +1,12 @@
-{% extends 'base.html' %}
-{% load static %}
-
-{% block content %}
+{% extends 'base.html' %} {% load static %} {% block content %}
 <link rel="stylesheet" href="{% static 'profileform.css' %}" />
+<link rel="stylesheet" href="{% static 'PostForm.css' %}" />
 
 <div class="edit-profile-container">
-
   <!-- Page title -->
-  <h1 class="edit-title">{% if post %}Edit Post{% else %}Create Post{% endif %}</h1>
+  <h1 class="edit-title">
+    {% if post %}Edit Post{% else %}Create Post{% endif %}
+  </h1>
 
   <!-- Form -->
   <form
@@ -16,14 +15,21 @@
     enctype="multipart/form-data"
     class="edit-profile-form"
   >
-    {% csrf_token %}
-    
-    {{ form.as_div }}
-    
+    <div class="avatar">
+      <figure>
+        <img
+          src="{% if post and post.attachment %}{{ post.attachment.url }}{% else %}https://placehold.co/600x600/262626/666666?text=Upload+Image{% endif %}"
+          alt="Post Preview"
+        />
+      </figure>
+    </div>
+    {% csrf_token %} {{ form.as_div }}
+
     <button type="submit" class="btn-submit" id="btn-submit-post">
       {% if post %}Update Post{% else %}Share Post{% endif %}
     </button>
   </form>
-
 </div>
+
+<script src="{% static 'PostForm.js' %}"></script>
 {% endblock %}

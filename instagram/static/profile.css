@@ -20,7 +20,7 @@
   width: 100%;
   max-width: 935px;
   margin: 0 auto;
-  padding: 40px 32px 80px 40px;  /* extra left padding — breathing room from sidebar */
+  padding: 40px 32px 80px 40px; /* extra left padding — breathing room from sidebar */
   color: #fff;
   box-sizing: border-box;
 }
@@ -199,7 +199,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: border-color 0.2s, transform 0.2s;
+  transition:
+    border-color 0.2s,
+    transform 0.2s;
 }
 .highlight-item:hover .highlight-circle {
   border-color: #888;
@@ -223,7 +225,7 @@
 .profile-tabs {
   display: flex;
   justify-content: center;
-  border-top: 1px solid #262626;  /* single divider line */
+  border-top: 1px solid #262626; /* single divider line */
   margin-bottom: 0;
   margin-top: 0;
 }
@@ -238,7 +240,9 @@
   border: none;
   border-top: 2px solid transparent;
   background: transparent;
-  transition: color 0.2s, border-color 0.2s;
+  transition:
+    color 0.2s,
+    border-color 0.2s;
   margin-top: -1px;
 }
 .tab-btn:hover {
@@ -339,7 +343,9 @@
   align-items: flex-start;
   gap: 10px;
   cursor: pointer;
-  transition: border-color 0.2s, transform 0.2s;
+  transition:
+    border-color 0.2s,
+    transform 0.2s;
 }
 .gs-card:hover {
   border-color: #555;
@@ -452,4 +458,213 @@
 .empty-subtitle strong {
   color: #fff;
   font-weight: 600;
+}
+
+/* ═══════════════════════════════════════
+   FOLLOW / FOLLOWING MODAL
+═══════════════════════════════════════ */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  opacity: 1;
+  transition: opacity 0.2s;
+}
+.modal-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+.follow-modal {
+  background: #262626;
+  width: 400px;
+  max-width: 90vw;
+  max-height: 400px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+}
+.follow-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid #363636;
+  position: relative;
+}
+.follow-modal-header h2 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  margin: 0;
+}
+.close-modal-btn {
+  position: absolute;
+  right: 16px;
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+}
+.follow-modal-search {
+  padding: 12px 16px;
+  border-bottom: 1px solid #363636;
+}
+.search-input-wrapper {
+  position: relative;
+  width: 100%;
+}
+.search-input-wrapper input {
+  width: 100%;
+  background: #121212;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px 8px 36px;
+  color: #fff;
+  font-size: 14px;
+  outline: none;
+}
+.search-input-wrapper input::placeholder {
+  color: #888;
+}
+.search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #888;
+  font-size: 18px;
+}
+.follow-modal-body {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 200px;
+}
+.follow-modal-body::-webkit-scrollbar {
+  width: 8px;
+}
+.follow-modal-body::-webkit-scrollbar-thumb {
+  background: #555;
+  border-radius: 4px;
+}
+.follow-user-row {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  gap: 12px;
+}
+.follow-user-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #1a1a1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.follow-user-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.follow-user-avatar .material-symbols-outlined {
+  font-size: 24px;
+  color: #888;
+}
+.follow-user-info {
+  flex: 1;
+  min-width: 0;
+}
+.follow-user-username {
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.follow-user-fullname {
+  font-size: 14px;
+  color: #888;
+  margin-top: 2px;
+}
+.verified-icon {
+  font-size: 14px;
+  color: #0095f6;
+}
+.follow-btn {
+  background: #0095f6;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 16px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+.follow-btn:hover {
+  background: #1aa4ff;
+}
+.following-btn {
+  background: #363636;
+  color: #fff;
+}
+.following-btn:hover {
+  background: #444;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+  text-align: center;
+}
+.empty-icon-wrap {
+  width: 80px;
+  height: 80px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+.empty-icon-inner {
+  font-size: 40px;
+  color: #fff;
+}
+.empty-state h3 {
+  font-size: 22px;
+  margin-bottom: 8px;
+}
+.empty-state p {
+  color: #aaa;
+  font-size: 14px;
+}
+
+.suggested-section {
+  padding-top: 16px;
+}
+.suggested-section h4 {
+  font-size: 16px;
+  font-weight: 600;
+  padding: 0 16px;
+  margin-bottom: 8px;
+}
+
+#btn-edit-profile {
+  padding-left: 20px !important;
 }

@@ -22,6 +22,7 @@ class Post(models.Model):
     created_at =  models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     caption = models.TextField()
+    is_save = models.ManyToManyField(to=User, blank=True, related_name='post_save')
 
     def __str__(self):
         return f"{self.user}: {self.caption}"

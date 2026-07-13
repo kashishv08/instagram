@@ -9,8 +9,17 @@
       <!-- Avatar -->
       <div class="profile-avatar-wrap">
         <div class="profile-avatar-circle">
-          {% if request.user.profile.avatar %}
-          <img src="{{ request.user.profile.avatar.url }}" alt="avatar" style="width:100%; height:100%; object-fit:cover; border-radius:50%;" />
+          {% if profile %}
+          <img
+            src="{{ profile.avatar.url }}"
+            alt="avatar"
+            style="
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+              border-radius: 50%;
+            "
+          />
           {% else %}
           <!-- Default placeholder (person + camera icons layered) -->
           <span class="material-symbols-outlined avatar-person-icon"
@@ -27,7 +36,7 @@
       <div class="profile-info">
         <!-- Username + verified badge -->
         <div class="username-row">
-          <span class="profile-username">{{request.user.username}}</span>
+          <span class="profile-username">{{profile.user.username}}</span>
           <!-- Hollow-circle pending verified icon (matches screenshot) -->
           <svg
             class="pending-badge"
@@ -41,28 +50,45 @@
             <circle cx="12" cy="12" r="10" />
             <path d="M8.5 12.5l2.5 2.5 4.5-4.5" />
           </svg>
+          <!-- prettier-ignore -->
+          {% if profile != request.user.profile %} 
+          {% if profile in request.user.profile.following.all %}
+          <a href="{% url 'follow' profile.user.id %}" class="sg-follow-btn"
+            >Following</a
+          >
+          {% else %}
+          <a href="{% url 'follow' profile.user.id %}" class="sg-follow-btn"
+            >Follow</a
+          >
+          {% endif %} {% endif %}
         </div>
 
         <!-- Display name (amber/warm like screenshot) -->
-        <div class="display-name">{{request.user.profile.bio}}</div>
+        <div class="display-name">{{profile.bio}}</div>
 
         <!-- Stats: 0 posts · 0 followers · 2 following (inline) -->
         <div class="profile-stats">
           <span class="stat-item"
-            ><strong>{{request.user.post_set.count}}</strong> Posts
+            ><strong>{{profile.user.post_set.count}}</strong> Posts
           </span>
-          <span class="stat-item"
-            ><strong>{{request.user.profile.followers.count}}</strong> Followers
+          <span
+            class="stat-item"
+            style="cursor: pointer"
+            onclick="openFollowModal('followers')"
+            ><strong>{{profile.followers.count}}</strong> Followers
           </span>
-          <span class="stat-item"
-            ><strong>{{request.user.profile.following.count}}</strong>
-            following</span
+          <span
+            class="stat-item"
+            style="cursor: pointer"
+            onclick="openFollowModal('following')"
+            ><strong>{{profile.following.count}}</strong> following</span
           >
         </div>
       </div>
     </div>
 
     <!-- Row 2: Action buttons (full-width spanning avatar+info) -->
+    {% if profile.user.id == request.user.id %}
     <div class="profile-buttons">
       <a
         href="{% url 'edit-profile' %}"
@@ -72,6 +98,7 @@
       >
       <button class="btn-action" id="btn-view-archive">View archive</button>
     </div>
+    {% endif %}
   </div>
   <!-- /profile-header-section -->
 
@@ -133,61 +160,50 @@
        POSTS PANEL
   ══════════════════════════════ -->
   <div class="tab-panel active" id="panel-posts">
-    <div class="getting-started-box">
-      <div class="getting-started-title">Getting Started</div>
-      <div class="gs-cards">
-        <!-- Share Photos card -->
-        <div class="gs-card" id="gs-share-photo">
-          <div class="gs-card-icon">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.6"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <rect x="3" y="3" width="18" height="18" rx="3" />
-              <circle cx="8.5" cy="8.5" r="1.5" />
-              <path d="M21 15l-5-5L5 21" />
-            </svg>
+    {% if profile.user.post_set.count > 0 %}
+    <div class="posts-grid">
+      {% for post in profile.user.post_set.all %}
+      <div class="post-cell">
+        <img src="{{post.attachment.url}}" alt="Post" />
+        <div class="post-cell-overlay">
+          <div class="overlay-stat">
+            <span class="material-symbols-outlined filled">favorite</span>
+            <span>{{ post.like_counts }}</span>
           </div>
-          <div class="gs-card-title">Share Photos</div>
-          <div class="gs-card-desc">
-            When you share photos, they will appear on your profile.
-          </div>
-          <button class="gs-card-btn" id="btn-share-first-photo">
-            Share your first photo
-          </button>
-        </div>
-
-        <!-- Add Profile Photo card -->
-        <div class="gs-card" id="gs-add-profile-photo">
-          <div class="gs-card-icon">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.6"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path
-                d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"
-              />
-              <circle cx="12" cy="13" r="4" />
-            </svg>
-          </div>
-          <div class="gs-card-title">Add Profile Photo</div>
-          <div class="gs-card-desc">
-            Add a profile photo so your friends know it's you.
-          </div>
-          <button class="gs-card-btn" id="btn-add-profile-photo">
-            Add profile photo
-          </button>
+          {% if post.user.profile == request.user.profile %}
+          <a href="{% url 'edit-post' post.id %}" class="overlay-stat">
+            <span class="material-symbols-outlined filled">edit_square</span>
+          </a>
+          <a href="{% url 'delete-post' post.id %}" class="overlay-stat">
+            <span class="material-symbols-outlined filled">delete</span>
+          </a>
+          {% endif %}
         </div>
       </div>
+      {% endfor %}
     </div>
+    {% else %}
+    <div class="empty-state">
+      <div class="empty-icon-ring">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect x="3" y="3" width="18" height="18" rx="3" />
+          <circle cx="8.5" cy="8.5" r="1.5" />
+          <path d="M21 15l-5-5L5 21" />
+        </svg>
+      </div>
+      <div class="empty-title">Share Photos</div>
+      <div class="empty-subtitle">
+        When you share photos, they will appear on your profile.
+      </div>
+    </div>
+    {% endif %}
   </div>
 
   <!-- ══════════════════════════════
@@ -200,6 +216,24 @@
         >+ New Collection</a
       >
     </div>
+
+    <!-- prettier-ignore -->
+    {% if profile.user == request.user %}
+    {% if request.user.post_save.count > 0 %}
+    <div class="posts-grid">
+      {% for post in request.user.post_save.all %}
+      <div class="post-cell">
+        <img src="{{post.attachment.url}}" alt="Post" />
+        <div class="post-cell-overlay">
+          <div class="overlay-stat">
+            <span class="material-symbols-outlined filled">favorite</span>
+            <span>{{ post.like_counts }}</span>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
     <div class="empty-state">
       <div class="empty-icon-ring">
         <svg
@@ -220,6 +254,7 @@
         saved.
       </div>
     </div>
+    {% endif %} {% endif %}
   </div>
 
   <!-- ══════════════════════════════
@@ -250,6 +285,8 @@
 </div>
 <!-- /profile-page -->
 
+{% include 'followInfo.html' %}
+
 <script>
   function switchTab(name) {
     document
@@ -260,6 +297,39 @@
       .forEach((p) => p.classList.remove("active"));
     document.getElementById("tab-" + name).classList.add("active");
     document.getElementById("panel-" + name).classList.add("active");
+  }
+
+  function openFollowModal(type) {
+    const overlay = document.getElementById("follow-modal-overlay");
+    const title = document.getElementById("follow-modal-title");
+    const followersList = document.getElementById("followers-list-container");
+    const followingList = document.getElementById("following-list-container");
+
+    // Freeze body scroll
+    document.body.style.overflow = "hidden";
+
+    // Setup modal based on type
+    if (type === "followers") {
+      title.innerText = "Followers";
+      followersList.classList.remove("hidden");
+      followingList.classList.add("hidden");
+    } else {
+      title.innerText = "Following";
+      followersList.classList.add("hidden");
+      followingList.classList.remove("hidden");
+    }
+
+    overlay.classList.remove("hidden");
+  }
+
+  function closeFollowModal(e) {
+    // Return early if we clicked inside the modal content instead of the overlay itself
+    if (e && e.target !== document.getElementById("follow-modal-overlay"))
+      return;
+
+    document.getElementById("follow-modal-overlay").classList.add("hidden");
+    // Restore body scroll
+    document.body.style.overflow = "";
   }
 </script>
 

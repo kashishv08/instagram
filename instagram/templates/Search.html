@@ -122,64 +122,38 @@
     letter-spacing: 0.05em;
   }
 </style>
-
-<!-- Current user -->
-<div class="rp-user-row">
-  {% if request.user.is_authenticated %}
-  <img
-    class="rp-avatar"
-    src="{{request.user.profile.avatar.url}}"
-    alt="profile"
-  />
-  <div>
-    <div class="rp-username">{{request.user.username}}</div>
-    <div class="rp-display">
-      Followers: {{request.user.profile.followers.count}} following:
-      {{request.user.profile.following.count}}
+{% extends 'base.html' %} {% block content %}
+<form action="{% url 'search-user' %}" method="get">
+  <label class="input">
+    <input
+      type="search"
+      required
+      placeholder="Search"
+      name="q"
+      style="color: black"
+    />
+  </label>
+</form>
+{% if search != None %}
+<div>Results for : {{search}}</div>
+{% for u in profiles %}
+<div class="suggestion-item">
+  <img class="sg-avatar" src="{{u.avatar.url}}" alt="user image" />
+  <div class="sg-info">
+    <div class="sg-name-row">
+      <span class="sg-name">{{u.user.username}}</span>
+      <span class="material-symbols-outlined sg-verified">verified</span>
     </div>
+    <div class="sg-sub">Popular</div>
   </div>
-  <a class="rp-switch-btn" href="{% url 'logout-user' %}">Logout</a>
-  {% endif %} {% if not request.user.is_authenticated %}
-  <div class="gap-2">
-    <a class="rp-switch-btn" href="{% url 'login-user' %}">Login</a>
-    <a class="rp-switch-btn" href="{% url 'register-user' %}">Signup</a>
-  </div>
-  {% endif %}
+  <!-- prettier-ignore -->
+  {% if u != request.user.profile %}
+  {% if u in request.user.profile.following.all %}
+  <a href="{% url 'view-profile' u.id %}" class="sg-follow-btn">Following</a>
+  {% else %}
+  <a href="{% url 'follow' u.user.id %}" class="sg-follow-btn">Follow</a>
+  {% endif %} {% endif %}
 </div>
-
-<!-- Suggested for you -->
-<div class="rp-section-header">
-  <span class="rp-section-title">Suggested for you</span>
-  <span class="rp-see-all">See all</span>
-</div>
-
-{% for u in users %}
-<a href="{% url 'view-profile' u.profile.id %}">
-  <div class="suggestion-item">
-    <img class="sg-avatar" src="{{u.profile.avatar.url}}" alt="profile image" />
-    <div class="sg-info">
-      <div class="sg-name-row">
-        <span class="sg-name">{{u.username}}</span>
-        <span class="material-symbols-outlined sg-verified">verified</span>
-      </div>
-      <div class="sg-sub">Popular</div>
-    </div>
-  </div>
-</a>
-{% endfor %}
-
-<!-- Footer -->
-<div class="rp-footer">
-  <div class="rp-footer-links">
-    <a href="#">About</a>·<a href="#"> Help</a>·<a href="#"> Press</a>·<a
-      href="#"
-    >
-      API</a
-    >·<a href="#"> Jobs</a>·<a href="#"> Privacy</a>·<a href="#"> Terms</a>·<a
-      href="#"
-    >
-      Locations</a
-    >·<a href="#"> Language</a>·<a href="#"> Meta Verified</a>
-  </div>
-  <div class="rp-copyright">© 2026 Instagram from Meta</div>
-</div>
+{% endfor %} {% else %}
+<div>No recent searches</div>
+{% endif %} {% endblock %}

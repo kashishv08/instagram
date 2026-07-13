@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from django.db.models import functions
 from django.db.models import functions
 from django.db.models import functions
@@ -76,8 +77,9 @@ def logoutUser(request):
 @login_required
 @checkOnboard
 def home(request):
-    posts = Post.objects.all()
-    return render(request, 'home.html', {'posts': posts})
+    posts = Post.objects.all().order_by("-created_at")
+    users = User.objects.exclude(username=request.user.username)
+    return render(request, 'home.html', {'posts': posts, 'users': users})
 
 @login_required
 def createProfile(request):
@@ -113,8 +115,9 @@ def editProfile(request):
         
 @login_required
 @checkOnboard
-def profile(request):
-    return render(request, 'Profile.html')
+def profile(request, id):
+    profile = get_object_or_404(Profile, id=id)
+    return render(request, 'Profile.html', context={"profile" : profile})
 
 @login_required
 @checkOnboard
@@ -141,6 +144,18 @@ def editPost(request, id):
 
 @login_required
 @checkOnboard
+def deletePost(request, id):
+    post = get_object_or_404(Post, id=id)
+    if post.user == request.user:
+        post.delete()
+        messages.info(request, "Post deleted")
+    else:
+        messages.info(request, "This post does not belongs to you")
+    return redirect(request.META['HTTP_REFERER'],"/")
+
+
+@login_required
+@checkOnboard
 def likePost(request, id):
     post = Post.objects.get(id=id)
     user = request.user
@@ -155,9 +170,7 @@ def likePost(request, id):
 @login_required
 @checkOnboard
 def follow(request, id):
-        post = Post.objects.filter(id=id).first()
-        print(post)
-        followUserProfile = post.user.profile
+        followUserProfile = get_object_or_404(Profile, id=id)
         print(followUserProfile)
 
         currentUserProfile = request.user.profile
@@ -166,5 +179,29 @@ def follow(request, id):
             currentUserProfile.following.remove(followUserProfile)
         else:
             currentUserProfile.following.add(followUserProfile)
-        return redirect("/")
+        # return redirect("/")
+        print("path==========================",request.path)
+        print(request.META.get("HTTP_REFERER", "/"))
+        return redirect(request.META.get("HTTP_REFERER", "/"))
+
+@login_required
+@checkOnboard
+def savePost(request, id):
+    savedPost = get_object_or_404(Post, id=id)
+    print(savedPost)
+    if request.method == 'POST':
+        if request.user in savedPost.is_save.all():
+            savedPost.is_save.remove(request.user)
+        else:
+            savedPost.is_save.add(request.user)
+    return redirect("/")
+
+@login_required
+@checkOnboard
+def searchUser(request):
+    search = request.GET.get('q')
+    if search:
+        profiles = Profile.objects.filter(user__username__contains=search)
+        return render(request, 'Search.html', context={"search": search, "profiles" : profiles})
+    return render(request, 'Search.html', context={"search": None, "profiles" : []})
 
