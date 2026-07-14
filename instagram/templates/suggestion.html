@@ -12,8 +12,8 @@
   <div class="rp-user-info">
     <div class="rp-username">{{ request.user.username }}</div>
     <div class="rp-display">
-      {{ request.user.profile.followers.count }} followers &middot;
-      {{ request.user.profile.following.count }} following
+      {{ request.user.profile.followers.count }} followers &middot; {{
+      request.user.profile.following.count }} following
     </div>
   </div>
   <a class="rp-switch-btn" href="{% url 'logout-user' %}">Log out</a>
@@ -30,14 +30,16 @@
 {% if users %}
 <div class="rp-section-header">
   <span class="rp-section-title">Suggested for you</span>
-  <span class="rp-see-all">See all</span>
 </div>
 
-{% for u in users %}
-{% if u.profile and u.profile.is_onboard %}
+{% for u in users %} {% if u.profile and u.profile.is_onboard %}
 <div class="suggestion-item">
-  <a href="{% url 'view-profile' u.profile.id %}" style="display:contents;">
-    <img class="sg-avatar" src="{{ u.profile.avatar.url }}" alt="{{ u.username }}" />
+  <a href="{% url 'view-profile' u.profile.id %}" style="display: contents">
+    <img
+      class="sg-avatar"
+      src="{{ u.profile.avatar.url }}"
+      alt="{{ u.username }}"
+    />
     <div class="sg-info">
       <div class="sg-name-row">
         <span class="sg-name">{{ u.username }}</span>
@@ -48,14 +50,14 @@
   </a>
   <!-- prettier-ignore -->
   {% if request.user.is_authenticated and u.profile in request.user.profile.following.all %}
-  <a href="{% url 'follow' u.id %}" class="sg-follow-btn sg-following-btn">Following</a>
+  <a href="{% url 'follow' u.id %}" class="sg-follow-btn sg-following-btn"
+    >Following</a
+  >
   {% elif request.user.is_authenticated %}
   <a href="{% url 'follow' u.id %}" class="sg-follow-btn">Follow</a>
   {% endif %}
 </div>
-{% endif %}
-{% endfor %}
-{% endif %}
+{% endif %} {% endfor %} {% endif %}
 
 <!-- Footer -->
 <div class="rp-footer">
